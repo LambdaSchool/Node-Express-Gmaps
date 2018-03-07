@@ -9,26 +9,36 @@ const API = config.gmaps.apiKey
 
 server.use(bodyParser.json());
 
-server.get('/place', (req, res) => {
-
-    const { searchTxt } = req.query;
+server.get('/places', (req, res) => {
+    const {searchTxt} = req.query;
 
     fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchTxt}&key=${API}`)
         .then(res => res.json())
         .then(json => {
-          return json.results[0].place_id;
+            return res.send(json.results);
         })
-        .then(placeId => {
-          fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${API}`)
-          .then(res => res.json())
-          .then(json => {
-            console.log(json);
-            return res.send(json);
-          })
-        })
-    
+
 });
 
+
+server.get('/place', (req, res) => {
+    const {searchTxt} = req.query;
+
+    fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchTxt}&key=${API}`)
+        .then(res => res.json())
+        .then(json => {
+            return json.results[0].place_id;
+        })
+        .then(placeId => {
+            fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${API}`)
+                .then(res => res.json())
+                .then(json => {
+                    console.log(json);
+                    return res.send(json);
+                })
+        })
+
+});
 
 server.listen(port, err => {
     if (err) console.log(err);
