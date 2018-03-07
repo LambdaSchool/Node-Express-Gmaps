@@ -1,0 +1,13 @@
+{
+  "name": "Node-Express-Gmaps",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "https://github.com/nikhilkamineni/Node-Express-Gmaps.git",
+  "author": "Nikhil Kamineni <nikhil.kamineni@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "node-fetch": "^2.1.1"
+  }
+}
