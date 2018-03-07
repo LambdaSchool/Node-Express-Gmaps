@@ -1,0 +1,14 @@
+{
+  "name": "Node-Express-Gmaps",
+  "version": "1.0.0",
+  "description": "Node-Express-Gmaps",
+  "main": "index.js",
+  "repository": "https://github.com/Dbald/Node-Express-Gmaps.git",
+  "author": "Sergey Nam / Devin Baldwin",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "node-fetch": "^2.1.1"
+  }
+}
