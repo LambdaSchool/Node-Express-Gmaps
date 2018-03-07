@@ -26,9 +26,23 @@ server.get('/places', (req, res) => {
 
   fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchName}&key=${API_KEY}`)
   .then(res => res.json())
-  .then(json => console.log(json))
-  .catch(err => console.error(err));
-
+  .then(json => json.results[0].place_id)
+  .then(place => {
+    fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${place}&key=${API_KEY}`)
+      .then(res => res.json())
+      .then(json => {
+        res.status(200);
+        res.send(json.result);
+      })
+      .catch(err => {
+        res.status(422);
+        res.send({ error: "Error"});
+      });
+  })
+  .catch(err => {
+    res.status(422);
+    res.send({ error: "Error"});
+  });
 });
 
 
