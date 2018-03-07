@@ -26,7 +26,7 @@ const query = "coffee+shops+in+Austin";
 server.get("/place", (req, res) => {
   const { search } = req.query;
   if (!search) {
-    res.send(STATUS_USER_ERROR);
+    res.send({ STATUS_USER_ERROR: "Input a place" });
     return;
   }
   console.log("Your search is ", search);
