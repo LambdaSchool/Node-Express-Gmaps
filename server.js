@@ -6,7 +6,6 @@ const config = require("./config.js");
 const STATUS_SUCCESS = 200;
 const STATUS_USER_ERROR = 422;
 
-// let data = [];
 const key = config.gmaps.apiKey;
 
 const server = express();
@@ -25,10 +24,9 @@ server.get('/place', (req, res) => {
   .then(data => {
     id = data.results[0].place_id;
     getPlaceInfo(id);
-    // console.log(data);
   })
   .catch(error => {
-    console.log('An error ocurred');
+    console.log('An error ocurred while getting query return');
   });
   res.status(STATUS_SUCCESS);
   res.send({ result: 'success' });
@@ -36,7 +34,6 @@ server.get('/place', (req, res) => {
 
 const getPlaceInfo = (id) => {
   let nextEndpoint = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${id}&key=${key}`;
-    // let test = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJf2bcOEwEzkwRIlC5c4aa4KM&key=AIzaSyCxJadB2xe5nmWQNqZgmNzT-vpsYa-FHEY';
   fetch(nextEndpoint, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
@@ -44,6 +41,9 @@ const getPlaceInfo = (id) => {
     .then(res => res.json())
     .then(data => {
       console.log(data);
+    })
+    .catch(error => {
+      console.log('An error ocurred while getting place information');
     });
 }
 
