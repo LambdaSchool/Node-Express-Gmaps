@@ -5,6 +5,7 @@ const fetch = require("node-fetch");
 
 const config = require("./config.js");
 const PORT = config.port;
+const MAP_KEY = config.gmaps.apiKey;
 
 //Put api here
 
