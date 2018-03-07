@@ -1,8 +1,8 @@
 const express = require('express');
-const { port, gmaps } = require('./config.js');
+const { PORT, GMAPS } = require('./config.js');
 const fetch = require('node-fetch')
 
 const server = express();
 
-server.listen(port);
+server.listen(PORT);
 
