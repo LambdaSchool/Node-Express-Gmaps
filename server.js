@@ -18,3 +18,11 @@ server.use(bodyParser.json());
 server.get("/place", (req, res) => {
   const { search } = req.query;
 });
+
+server.listen(PORT, err => {
+  if (err) {
+    console.log(`There was an error: ${err}`);
+  } else {
+    console.log(`Server is listening on port: ${PORT}`);
+  }
+});
