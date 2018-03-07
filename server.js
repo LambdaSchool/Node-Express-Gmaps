@@ -18,6 +18,7 @@ const PORT = config.port;
 // the first place that is in the array of places returned to you from `Place Search`.
 //===================================================================================================
 
+
 server.get('/place', (req, res) => {
   const { search } = req.query;
   request(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${search}&key=${KEY}`, (error, response, body) => {
@@ -37,9 +38,26 @@ server.get('/place', (req, res) => {
 // places returned to you from `Place Search`.
 //===================================================================================================
 
-server.get('/places', () => {
-  request('', (error, response, body) => {
-    res.send(body);
+server.get('/places', (req, res) => {
+
+   const { search } = req.query;
+
+  request(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${search}&key=${KEY}`, (error, response, body) => {
+
+    const parsedResults = JSON.parse(body);
+    const details = [];
+    const listLength = parsedResults.results.length;
+    let counter = 0;
+
+    parsedResults.results.forEach((place) => {
+      request(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${place.place_id}&key=${KEY}`, (error, response, body) => {
+        details.push(body);
+        counter++;
+        if(listLength === counter){
+          res.send(details);
+        }
+      });
+    });
   });
 });
 
@@ -58,3 +76,6 @@ server.listen(3030, (err) => {
     console.log(`Server is listening on port ${PORT}`)
   }
 });
+
+   
+
