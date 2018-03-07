@@ -21,13 +21,35 @@ server.get('/place', (req, res) => {
     .then(res => res.json())
     .then(listOfPlaces => {
       const id = listOfPlaces.results[0].place_id;
-      console.log('id: ', id);
-      return fetch(`${DETAILS_REQUEST}json?placeid={id}&key=${API_KEY}`);
+      return fetch(`${DETAILS_REQUEST}json?placeid=${id}&key=${API_KEY}`);
     })
     .then(res => res.json())
-    .then(details => {
-      console.log('details: ', details);
-      res.send(details.result);
+    .then(details => res.send(details.result))
+    .catch(err => console.log('There was an error: ', err));
+});
+
+server.get('/places', (req, res) => {
+  const { term } = req.query;
+  const searchTerm = term.split(' ').join('+');
+  fetch(`${SEARCH_REQUEST}json?query=${searchTerm}&key=${API_KEY}`)
+    .then(res => res.json())
+    .then(listOfPlaces => {
+      const ids = [];
+      listOfPlaces.results.forEach(eachResult => ids.push(eachResult.place_id));
+      let DetailsPromises = [];
+      ids.forEach(eachID => {
+        DetailsPromises.push(
+          fetch(`${DETAILS_REQUEST}json?placeid=${eachID}&key=${API_KEY}`)
+            .then(res => res.json())
+        );
+      });
+      Promise.all(DetailsPromises).then(locationDetails => {
+        let displayData = [];
+        locationDetails.forEach(eachLocation => {
+          displayData.push(eachLocation.result);
+        });
+        res.send(displayData);
+      });
     })
     .catch(err => console.log('There was an error: ', err));
 });
