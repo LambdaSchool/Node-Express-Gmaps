@@ -9,20 +9,16 @@ server.use(bodyParser.json());
 const PORT = config.port;
 const MAP_KEY = config.gmaps.apiKey;
 
-//Put api here
 let results;
 let mapId;
 
 const STATUS_USER_ERROR = 422;
 const STATUS_SUCCESS = 200;
 
-const URL_PLACE_SEARCH = "";
-const URL_PLACE_DETAILS = "";
-
 const url = "https://maps.googleapis.com/maps/api/place";
 
+
 server.get("/place", (req, res) => {
-  const query = "coffee+shops+in+Austin";
   const search = req.query.search;
   if (!search) {
     res.send({ STATUS_USER_ERROR: "Input a place" });
@@ -44,18 +40,19 @@ server.get("/place", (req, res) => {
 
 let result;
 
-server.get("/place", (req, res) => {
-  console.log("second map id", mapId);
-  fetch(
-    `https://maps.googleapis.com/maps/api/place/details/json?placeid=${mapId}&key=${MAP_KEY}`
-      .then(place => place.json())
-      .then(place => {
-        res.send(place);
-      })
-      .catch(err => {
-        res.send({ STATUS_USER_ERROR: "There was an error" });
-      })
-  );
+ server.get("/places", (req, res) => {
+    
+   console.log("second map id", mapId);
+   fetch(
+     `https://maps.googleapis.com/maps/api/places/details/json?placeid=${mapId}&key=${MAP_KEY}`
+     .then(place => place.json())
+     .then(place => {
+       res.send(place);
+     })
+     .catch(err => {
+       res.send({ STATUS_USER_ERROR: "There was an error" });
+     })
+ );
 });
 
 server.listen(PORT, err => {
