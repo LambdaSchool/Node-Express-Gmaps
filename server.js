@@ -9,18 +9,6 @@ const API = config.gmaps.apiKey
 
 server.use(bodyParser.json());
 
-server.get('/places', (req, res) => {
-    const {searchTxt} = req.query;
-
-    fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchTxt}&key=${API}`)
-        .then(res => res.json())
-        .then(json => {
-            return res.send(json.results);
-        })
-
-});
-
-
 server.get('/place', (req, res) => {
     const {searchTxt} = req.query;
 
