@@ -9,6 +9,9 @@ server.use(bodyParser.json());
 
 const PORT = config.port;
 
+const detailsArray = [];
+
+
 server.get('/place', (req, res) => {
   const textSearch = req.query.textSearch;
   fetch(
@@ -18,13 +21,7 @@ server.get('/place', (req, res) => {
   )
     .then(res => res.json())
     .then(json => {
-      // const placeID = json.results[0].place_id
-      json.results.forEach(element => {
-        resultsArray.push(element);
-      });
-      resultsArray.forEach(result => {
-        placeIdArr.push(result.place_id);
-      });
+      let placeIdArr = json.results.map(element => element.place_id);
       placeIdArr.forEach(place => {
         fetch(
           `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place}&key=${
@@ -37,10 +34,6 @@ server.get('/place', (req, res) => {
     });
   res.send(detailsArray);
 });
-
-const resultsArray = [];
-const detailsArray = [];
-const placeIdArr = [];
 
 server.listen(PORT, err => {
   if (err) {
