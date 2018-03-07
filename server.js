@@ -19,6 +19,8 @@ const STATUS_SUCCESS = 200;
 const URL_PLACE_SEARCH = "";
 const URL_PLACE_DETAILS = "";
 
+const url = "https://maps.googleapis.com/maps/api/place";
+
 const query = "coffee+shops+in+Austin";
 
 server.get("/place", (req, res) => {
@@ -28,9 +30,7 @@ server.get("/place", (req, res) => {
     return;
   }
   console.log("Your search is ", search);
-  fetch(
-    `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${search}&key=${MAPS_KEY}`
-  )
+  fetch(`${url}/textsearch/json?query=${search}&key=${MAP_KEY}`)
     .then(place => place.json())
     .then(place => {
       console.log(place);
