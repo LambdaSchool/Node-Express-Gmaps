@@ -36,33 +36,31 @@ server.get('/place', (req, res) => {
     });
 });
 
+fetch(`${url}details/json?placeid=${place.place_id}&key=${API_KEY}`)
+.then(res => res.json())
+.then(json => {
+  newPlace.push(json.result);
+})
+.catch(err => {
+  res.status(STATUS_USER_ERROR);
+  res.send({ error: "Error fetching place details" });
+
 server.get('/places', (req, res) => {
   const { placeNames } = req.query;
   const placesResult = [];
   fetch(`${url}textsearch/json?query=${placeNames}&key=${API_KEY}`)
     .then(res => res.json())
-    .then(json => json.results)
+    .then(json => placesResult.push(json.result))
     .then(places => {
       let newPlace = [];
       places.forEach(place => {
-        fetch(`${url}details/json?placeid=${place.place_id}&key=${API_KEY}`)
-          .then(res => res.json())
-          .then(json => {
-            newPlace.push(json.result);
-          })
-          .catch(err => {
-            res.status(STATUS_USER_ERROR);
-            res.send({ error: "Error fetching place details" });
+        let 
           });
       })
-      return newPlace
     })
     .then((place) => {
-      place.forEach(place => {
-        placesResult.push(place);
-      })
       res.status(STATUS_SUCCESSFUL);
-      res.send(placesResult);
+      res.send();
     })
     .catch(err => {
       res.status(STATUS_USER_ERROR);
