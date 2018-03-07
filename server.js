@@ -21,10 +21,9 @@ const URL_PLACE_DETAILS = "";
 
 const url = "https://maps.googleapis.com/maps/api/place";
 
-const query = "coffee+shops+in+Austin";
-
 server.get("/place", (req, res) => {
-  const { search } = req.query;
+  const query = "coffee+shops+in+Austin";
+  const search = req.query.search;
   if (!search) {
     res.send({ STATUS_USER_ERROR: "Input a place" });
     return;
@@ -44,6 +43,8 @@ server.get("/place", (req, res) => {
 });
 
 let result;
+
+
 
 server.listen(PORT, err => {
   if (err) {
