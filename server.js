@@ -4,6 +4,8 @@ const server = express();
 const fetch = require("node-fetch");
 
 const config = require("./config.js");
+server.use(bodyParser.json());
+
 const PORT = config.port;
 const MAP_KEY = config.gmaps.apiKey;
 
@@ -14,30 +16,15 @@ let mapId;
 const STATUS_USER_ERROR = 422;
 const STATUS_SUCCESS = 200;
 
-const URL_PLACE_SEARCH = "";
-const URL_PLACE_DETAILS = "";
-
-//const query = "coffee+shops+in+Austin";
-
-server.use(bodyParser.json());
-
 server.get("/place", (req, res) => {
-//   if (!search) {
-//     res.send(STATUS_USER_ERROR);
-//     return;
-//   }
-// console.log("Your search is ", search);
-
-//const { searches } = req.query;
   fetch(
     `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${search}&key=${MAP_KEY}`
   )
-    .then(searches => searches.json())
-    .then(searches => {
-   // console.log(searches);
-     res.status(SUCCESS);
-      mapId = searches.results[0].place_id;
-      res.send(searches);
+    .then(place => place.json())
+    .then(place => {
+      console.log(place);
+      mapId = place.results[0].place_id;
+      res.send(place);
     })
     .catch(err => {
       res.status(STATUS_USER_ERROR);
