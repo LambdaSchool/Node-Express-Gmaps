@@ -1,6 +1,7 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const server = express();
+const fetch = require("node-fetch");
 
 const config = require("./config.js");
 const PORT = config.port;
