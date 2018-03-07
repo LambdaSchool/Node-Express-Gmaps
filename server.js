@@ -1,9 +1,12 @@
 const express =  require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const { gmaps } = require('./config.js');
+const fetch = require('node-fetch');
+const config = require('./config.js');
 
-const PORT = 3030;
+const PORT = config.port;
+const API_KEY = config.gmaps.apiKey;
+
 const STATUS_USER_ERROR = 422;
 const STATUS_SUCCESS = 200;
 
@@ -15,6 +18,20 @@ const sendUserError = (msg, res) => {
   res.status(STATUS_USER_ERROR).json({ error: msg });
   return;
 };
+
+server.get('/places', (req, res) => {
+  const {
+    searchName
+  } = req.query;
+
+  fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchName}&key=${API_KEY}`)
+  .then(res => res.json())
+  .then(json => console.log(json))
+  .catch(err => console.error(err));
+
+});
+
+
 
 server.listen(PORT, () => {
   console.log(`server listening on http://localhost:${PORT}`);
