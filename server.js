@@ -19,3 +19,12 @@ server.get('/place', (req, res) => {
         })
         .catch(err => console.error(err));
 })
+
+server.get('/places', (req, res) => {
+    fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${req.query.location}&key=${config.gmaps.apiKey}`)
+        .then(res => res.json())
+        .then(json => {
+            return res.send(json);
+        })
+        .catch(err => console.error(err));
+})
