@@ -8,18 +8,18 @@ const API_KEY = config.gmaps.apiKey;
 const server = express();
 const STATUS_SUCCESSFUL = 200;
 const STATUS_USER_ERROR = 422;
-const url = 'https://maps.googleapis.com/maps/api/place/';
+const url = 'https://maps.googleapis.com/maps/api/place';
 
 server.use(bodyParser.json());
 
 server.get('/place', (req, res) => {
   const { placeName } = req.query;
 
-  fetch(`${url}textsearch/json?query=${placeName}&key=${API_KEY}`)
+  fetch(`${url}/textsearch/json?query=${placeName}&key=${API_KEY}`)
     .then(res => res.json())
     .then(json => json.results[0].place_id)
     .then(place => {
-      fetch(`${url}details/json?placeid=${place}&key=${API_KEY}`)
+      fetch(`${url}/details/json?placeid=${place}&key=${API_KEY}`)
         .then(res => res.json())
         .then(json => {
           res.status(STATUS_SUCCESSFUL);
@@ -36,32 +36,40 @@ server.get('/place', (req, res) => {
     });
 });
 
-fetch(`${url}details/json?placeid=${place.place_id}&key=${API_KEY}`)
-.then(res => res.json())
-.then(json => {
-  newPlace.push(json.result);
-})
-.catch(err => {
-  res.status(STATUS_USER_ERROR);
-  res.send({ error: "Error fetching place details" });
+
 
 server.get('/places', (req, res) => {
   const { placeNames } = req.query;
-  const placesResult = [];
-  fetch(`${url}textsearch/json?query=${placeNames}&key=${API_KEY}`)
+
+  fetch(`${url}/textsearch/json?query=${placeNames}&key=${API_KEY}`)
     .then(res => res.json())
-    .then(json => placesResult.push(json.result))
+    .then(json => json.results)
     .then(places => {
-      let newPlace = [];
+      const promises = [];
+
+      // Iterating through every place returned and creating new promise then pushing to an array
       places.forEach(place => {
-        let 
-          });
+        promises.push(new Promise(resolve => {
+          fetch(`${url}/details/json?placeid=${place.place_id}&key=${API_KEY}`)
+            .then(res => res.json())
+            .then(json => {
+              resolve(json.result);
+            })
+            .catch(err => {
+              res.status(STATUS_USER_ERROR);
+              res.send({ error: "Error fetching place details" });
+            });
+
+        }));
+        });
+
+      // Executing every promise in the array and sending the array of resulting data back
+      Promise.all(promises)
+        .then(data => {
+          res.status(STATUS_SUCCESSFUL);
+          res.send(data);
+        });
       })
-    })
-    .then((place) => {
-      res.status(STATUS_SUCCESSFUL);
-      res.send();
-    })
     .catch(err => {
       res.status(STATUS_USER_ERROR);
       res.send({ error: "Error fetching nearby places" });
