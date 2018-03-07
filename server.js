@@ -16,7 +16,12 @@ server.get("/place", (req, res) => {
 
   fetch(`${url}textsearch/json?query=${clientProvided}&key=${config.gmaps.apiKey}`)
     .then(res => res.json())
-    .then(json => console.log(json))
+    .then(json => json.results[0].place_id)
+    .then(placeID => {
+      fetch(`${url}details/json?placeid=${placeID}&key=${config.gmaps.apiKey}`)
+      .then(res => res.json())
+      .then(json => res.send(json.result))
+    })
 })
 
 
