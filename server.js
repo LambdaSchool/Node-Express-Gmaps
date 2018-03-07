@@ -44,7 +44,19 @@ server.get("/place", (req, res) => {
 
 let result;
 
-
+server.get("/place", (req, res) => {
+  console.log("second map id", mapId);
+  fetch(
+    `https://maps.googleapis.com/maps/api/place/details/json?placeid=${mapId}&key=${MAP_KEY}`
+      .then(place => place.json())
+      .then(place => {
+        res.send(place);
+      })
+      .catch(err => {
+        res.send({ STATUS_USER_ERROR: "There was an error" });
+      })
+  );
+});
 
 server.listen(PORT, err => {
   if (err) {
