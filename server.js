@@ -4,6 +4,8 @@ const server = express();
 const fetch = require("node-fetch");
 
 const config = require("./config.js");
+server.use(bodyParser.json());
+
 const PORT = config.port;
 const MAP_KEY = config.gmaps.apiKey;
 
@@ -18,8 +20,6 @@ const URL_PLACE_SEARCH = "";
 const URL_PLACE_DETAILS = "";
 
 const query = "coffee+shops+in+Austin";
-
-server.use(bodyParser.json());
 
 server.get("/place", (req, res) => {
   const { search } = req.query;
