@@ -20,7 +20,8 @@ const PORT = config.port;
 //===================================================================================================
 
 server.get('/place', (req, res) => {
-  request(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+in+Sydney&key=${KEY}`, (error, response, body) => {
+  const { search } = req.query;
+  request(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${search}&key=${KEY}`, (error, response, body) => {
     res.send(body);
   });
 });
