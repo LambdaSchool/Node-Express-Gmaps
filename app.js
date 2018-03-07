@@ -8,14 +8,22 @@ const PORT = config.port;
 const prom = fetch(
   `https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+in+Sydney&key=${key}`)
   .then(res => res.json())
-  .then(json =>(json.results[0]));
-  console.log(prom);
+  .then(json => json.results[0])
+  .then( forId => fetch(
+    `https://maps.googleapis.com/maps/api/place/details/json?placeid=${forId.place_id}&key=${key}`))
+  .then(res => res.json())
+  .then(json => console.log(json.result));
+  // console.log("this is prom :", prom);
+
   
-const promResolved = Promise.resolve(prom);  
-promResolved.then( abc => {
-  console.log(abc);
-})
-// console.log(promResolved);
+
+
+// fetch(
+//   `https://maps.googleapis.com/maps/api/place/details/json?placeid=${returnedPlaceId}&key=${key}`)
+//   .then(res => res.json())
+//   .then(json => (json.name));
+  // console.log(details);
+  
   
   
   
