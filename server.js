@@ -29,13 +29,13 @@ server.get("/place", (req, res) => {
   }
   console.log("Your search is ", search);
   fetch(
-    `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${search}&key=${MAP_KEY}`
+    `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${search}&key=${MAPS_KEY}`
   )
-    .then(searches => searches.json())
-    .then(searches => {
-      console.log(searches);
-      mapId = searches.results[0].place_id;
-      res.send(searches);
+    .then(place => place.json())
+    .then(place => {
+      console.log(place);
+      mapId = place.results[0].place_id;
+      res.send(place);
     })
     .catch(err => {
       res.send(STATUS_USER_ERROR);
