@@ -1,22 +1,24 @@
 {
-  "name": "gmaps",
-  "version": "0.0.1",
-  "description": "LambdaSchool Gmaps",
+  "name": "node-express-gmaps",
+  "version": "1.0.0",
+  "description": "Basic Gmap Node Express App",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/germancin/Node-Express-Gmaps.git"
+  },
+  "author": "Aaron Burk and German Go",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/germancin/Node-Express-Gmaps/issues"
+  },
+  "homepage": "https://github.com/germancin/Node-Express-Gmaps#readme",
   "dependencies": {
-    "babel-preset-es2015": "^6.24.0",
-    "body-parser": "^1.17.2",
-    "chai": "^4.1.1",
-    "chai-http": "^3.0.0",
-    "eslint": "^3.17.1",
-    "eslint-config-airbnb": "^14.1.0",
-    "eslint-plugin-import": "^2.2.0",
-    "express": "^4.15.4",
-    "mocha": "^3.5.0",
-    "cors": "^2.8.4"
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "node-fetch": "^2.1.1"
   }
 }
