@@ -6,3 +6,16 @@ const server = express();
 
 server.listen(config.port);
 
+// server.get('./', (req, res) => {
+//     fetch('https://maps.googleapis.com/maps/api/place/textsearch/json', req.body, {key: config})
+//         .then(res => res.json())
+//         .then(json => res.send(json));
+// })
+server.get('./', (req, res) => {
+    fetch('https://maps.googleapis.com/maps/api/place/textsearch/json?', config.gmaps.apiKey)
+        .then(res => res.json())
+        .then(json => {
+            return res.send(json);
+        })
+        .catch(err => console.error(err));
+})
