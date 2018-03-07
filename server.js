@@ -1,4 +1,4 @@
-const { PORT, gmaps } = require('/config.js');
+config = require('./config.js');
 const express = require('express');
 const bodyParser = require('body-parser');
 const server = express();
