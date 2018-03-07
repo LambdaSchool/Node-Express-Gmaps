@@ -1,0 +1,24 @@
+{
+  "name": "node-express-gmaps",
+  "version": "1.0.0",
+  "description": "Sample Search using Gmaps API",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon ./server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dan-Lara/Node-Express-Gmaps.git"
+  },
+  "author": "Daniel Lara & Roy Tan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dan-Lara/Node-Express-Gmaps/issues"
+  },
+  "homepage": "https://github.com/Dan-Lara/Node-Express-Gmaps#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2"
+  }
+}
