@@ -16,12 +16,14 @@ server.get('/place', (req, res) => {
   let { query } = req.query;
   query = query.replace(/\s/g, '+');
   let endpoint = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${query}&key=${key}`;
-  fetch(endpoint)
-    .then(res => console.log(res.headers.get('content-type')));
+  fetch(endpoint, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  })
+    .then(res => res.json())
+    .then(data => console.log(data.results[0]));
   res.status(STATUS_SUCCESS);
-  res.send({ status: 'success' });
+  res.send({ result: 'success' });
 });
-
-
 
 server.listen(config.port);
