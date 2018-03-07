@@ -1,10 +1,13 @@
 const express = require('express');
+const server = express();
+
+
 const  config  = require('./config.js');
 const PORT = config.port;
 
 
 
-/// It should be added. 
+// It should be added. 
 
 
 
