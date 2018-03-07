@@ -1,8 +1,8 @@
 const express = require('express');
-const { PORT, GMAPS } = require('./config.js');
+const config = require('./config.js');
 const fetch = require('node-fetch')
 
 const server = express();
 
-server.listen(PORT);
+server.listen(config.port);
 
