@@ -21,3 +21,10 @@ server.get("/place", (req, res) => {
   
 });
 
+server.listen(PORT, err => {
+  if (err) {
+    console.log(`There was an error: ${err}`);
+  } else {
+    console.log(`Server is listening on port: ${PORT}`);
+  }
+});
