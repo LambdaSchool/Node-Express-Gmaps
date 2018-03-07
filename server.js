@@ -13,7 +13,6 @@ server.use(cors());
 
 const PORT = config.port;
 
-
 //===================================================================================================
 // Create an endpoint `/place` that, provided a query, returns the detailed information about 
 // the first place that is in the array of places returned to you from `Place Search`.
@@ -22,7 +21,14 @@ const PORT = config.port;
 server.get('/place', (req, res) => {
   const { search } = req.query;
   request(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${search}&key=${KEY}`, (error, response, body) => {
-    res.send(body);
+
+    const parsedResults = JSON.parse(body);
+
+    const { place_id } = parsedResults.results[0];
+
+    request(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&key=${KEY}`, (error, response, body) => {
+      res.send(body);
+    });
   });
 });
 
@@ -43,10 +49,6 @@ server.get('*', (req, res) => {
   res.status(STATUS_USER_ERROR);
   res.send("Page not found");
 });
-
-
-
-
 
 server.listen(3030, (err) => {
   if (err) {
