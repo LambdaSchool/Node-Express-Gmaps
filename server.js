@@ -16,10 +16,21 @@ let mapId;
 const STATUS_USER_ERROR = 422;
 const STATUS_SUCCESS = 200;
 
+const URL_PLACE_SEARCH = "";
+const URL_PLACE_DETAILS = "";
+
+const url = "https://maps.googleapis.com/maps/api/place";
+
+const query = "coffee+shops+in+Austin";
+
 server.get("/place", (req, res) => {
-  fetch(
-    `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${search}&key=${MAP_KEY}`
-  )
+  const { search } = req.query;
+  if (!search) {
+    res.send(STATUS_USER_ERROR);
+    return;
+  }
+  console.log("Your search is ", search);
+  fetch(`${url}/textsearch/json?query=${search}&key=${MAP_KEY}`)
     .then(place => place.json())
     .then(place => {
       console.log(place);
