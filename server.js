@@ -14,8 +14,13 @@ const url = 'https://maps.googleapis.com/maps/api/place';
 server.use(bodyParser.json());
 
 server.get('/place', (req, res) => {
+<<<<<<< HEAD
 
 });
+=======
+    const { place } 
+})
+>>>>>>> df65725e283098d7dfd37597c7f4810ccb13373a
 
 server.listen(PORT, (err) => {
     if (err) console.error(err);
