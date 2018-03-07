@@ -25,7 +25,7 @@ server.get("/place", (req, res) => {
   console.log("Your search is ", search);
   fetch(`${url}/textsearch/json?query=${search}&key=${MAP_KEY}`)
     .then(res => res.json())
-    .then(json => json.results[0].place_id)
+    .then(json => console.log(json.results[0].place_id))
     .then(place => {
       fetch(`${url}/details/json?placeid=${place}&key=${MAP_KEY}`)
         .then(res => res.json())
