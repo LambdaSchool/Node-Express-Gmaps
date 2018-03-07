@@ -9,50 +9,36 @@ server.use(bodyParser.json());
 const PORT = config.port;
 const MAP_KEY = config.gmaps.apiKey;
 
-let results;
-let mapId;
-
 const STATUS_USER_ERROR = 422;
 const STATUS_SUCCESS = 200;
 
 const url = "https://maps.googleapis.com/maps/api/place";
 
+const query = "coffee+shops+in+Austin";
 
 server.get("/place", (req, res) => {
-  const search = req.query.search;
+  const { search } = req.query;
   if (!search) {
     res.send({ STATUS_USER_ERROR: "Input a place" });
     return;
   }
   console.log("Your search is ", search);
   fetch(`${url}/textsearch/json?query=${search}&key=${MAP_KEY}`)
-    .then(place => place.json())
+    .then(res => res.json())
+    .then(json => json.results[0].place_id)
     .then(place => {
-      console.log(place);
-      mapId = place.results[0].place_id;
-      res.send(place);
+      fetch(`${url}/details/json?placeid=${place}&key=${MAP_KEY}`)
+        .then(res => res.json())
+        .then(json => {
+          res.send({ STATUS_SUCCESS: json.result });
+        })
+        .catch(err => {
+          res.send({ STATUS_USER_ERROR: "Error fetching place" });
+        });
     })
     .catch(err => {
-      res.status(STATUS_USER_ERROR);
-      res.json({ error: err });
+      res.send({ STATUS_USER_ERROR: "Error fetching details" });
     });
-});
-
-let result;
-
- server.get("/places", (req, res) => {
-    
-   console.log("second map id", mapId);
-   fetch(
-     `https://maps.googleapis.com/maps/api/places/details/json?placeid=${mapId}&key=${MAP_KEY}`
-     .then(place => place.json())
-     .then(place => {
-       res.send(place);
-     })
-     .catch(err => {
-       res.send({ STATUS_USER_ERROR: "There was an error" });
-     })
- );
 });
 
 server.listen(PORT, err => {
