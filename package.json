@@ -1,0 +1,24 @@
+{
+  "name": "express-gmaps",
+  "version": "1.0.0",
+  "description": "Topics:\r  * APIs\r  * API Documentation\r  * Rate Limits\r  * Multiple requests",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashleijo/Node-Express-Gmaps.git"
+  },
+  "author": "Ashlei J & John S",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ashleijo/Node-Express-Gmaps/issues"
+  },
+  "homepage": "https://github.com/ashleijo/Node-Express-Gmaps#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "node-fetch": "^2.1.1"
+  }
+}
