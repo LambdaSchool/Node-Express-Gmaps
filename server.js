@@ -16,10 +16,17 @@ server.get('/place', (req, res) => {
     fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchTxt}&key=${API}`)
         .then(res => res.json())
         .then(json => {
-
-
+          return json.results[0].place_id;
+        })
+        .then(placeId => {
+          fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${API}`)
+          .then(res => res.json())
+          .then(json => {
+            console.log(json);
             return res.send(json);
-        });
+          })
+        })
+    
 });
 
 
