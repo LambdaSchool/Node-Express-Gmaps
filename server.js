@@ -13,7 +13,12 @@ server.get('/place', (req, res) => {
   const textSearch = req.query.textSearch;
   fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${textSearch}&key=${config.gmaps.apiKey}`)
     .then(res => res.json())
-    .then(json => res.send(json))
+    .then(json => {
+      const placeID = json.results[0].place_id
+      fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeID}&key=${config.gmaps.apiKey}`)
+        .then(res => res.json())
+        .then(json => res.send(json))
+  })
 });
 
 server.listen(PORT, err => {
