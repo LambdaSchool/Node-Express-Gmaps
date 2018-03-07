@@ -27,11 +27,11 @@ server.get('/places', (req, res) => {
   fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchName}&key=${API_KEY}`)
   .then(res => res.json())
   .then(json => console.log(json))
-  .catch(err => console.error(err));
+  .catch(err => {
+    res.status(STATUS_USER_ERROR).send(sendUserError('Error fetching data'));
+  });
 
 });
-
-
 
 server.listen(PORT, () => {
   console.log(`server listening on http://localhost:${PORT}`);
