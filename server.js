@@ -17,4 +17,7 @@ server.use(bodyParser.json());
 
 server.get("/place", (req, res) => {
   const { search } = req.query;
+  const url = URL_PLACE_SEARCH + query;
+  
 });
+
