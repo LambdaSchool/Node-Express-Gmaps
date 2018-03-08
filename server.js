@@ -1,5 +1,5 @@
 const express = require('express');
-const config = require('config.js');
+const config = require('./config.js');
 const controllers = require('./controllers/travel-distance.js');
 const server = express();
 const PORT = config.port;
