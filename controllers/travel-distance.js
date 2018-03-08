@@ -7,17 +7,14 @@ const STATUS_USER_ERROR = 422;
 const { getDistances } = require("../models/travel-distance.js");
 
 router.get("/travel/modes", (req, res) => {
-  getDistances(req.query.search)
-    .then(ids => [ids[0]])
-    .then(getDistances)
-    .then(details => {
-      res.status(STATUS_SUCCESS);
-      res.send({ distances: details });
+  const { start, finish } = req.query;
+  getDistances(start, finish)
+    .then(ids => {
+      res.send({ STATUS_SUCCESS: ids });
     })
     .catch(err => {
       console.log(err);
-      res.status(STATUS_USER_ERROR);
-      res.send({ err: err });
+      res.send({ STATUS_USER_ERROR: STATUS_USER_ERROR });
     });
 });
 

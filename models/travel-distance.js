@@ -1,21 +1,20 @@
 const fetch = require("node-fetch");
 const config = require("../config.js");
 
-const KEY_GMAPS_DISTANCES = config.gmaps.apiKey;
-
-const URL_TRAVEL_DISTANCES = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=Seattle&destinations=San+Francisco&key=${KEY_GMAPS_DISTANCES}`;
-
 const starterUrl = "https://maps.googleapis.com/maps/api/distancematrix";
 
-const URL_DRIVING_DISTANCES = `${starterUrl}/json?origins=&destinations=$&key=${KEY_GMAPS_DISTANCES}`;
+const KEY_GMAPS_DISTANCES = config.gmaps.apiKey;
 
-function getDistances(query) {
+
+function getDistances(start = "los+angeles", finish = "new+york") {
   return new Promise((resolve, reject) => {
-    const searchUrl = URL_DRIVING_DISTANCES;
-    console.log(searchUrl);
-    fetch(searchUrl)
+    const URL_DRIVING_DISTANCES = `${starterUrl}/json?origins=` + start + `&destinations=` + finish + `&key=` + KEY_GMAPS_DISTANCES + "&mode=driving";
+    console.log(URL_DRIVING_DISTANCES);
+    fetch(URL_DRIVING_DISTANCES)
       .then(distances => distances.json())
-      .then(distances => distances.map(distance => distance.origin_addresses))
+      .then(distances => {
+        resolve(distances.rows);
+      })
       .then(ids => {
         resolve(ids);
       })
