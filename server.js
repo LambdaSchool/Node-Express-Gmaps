@@ -2,12 +2,12 @@ const config = require('./config.js');
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
+const fetch = require('node-fetch');
 
 const key = config.gmaps.apiKey;
-const PORT = 3000;
+const PORT = config.port;
 const STATUS_SUCCESS = 200;
 const STATUS_USER_ERROR = 422;
-
 const resultIds = [];
 const results = [];
 
@@ -66,39 +66,32 @@ server.get('/places', (req, res) => {
     });
   }
   query = query.split(' ').join('+');
-  axios
-    .get(
-      `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${query}&key=${key}`
-    )
-    .then(({ data }) => {
-      data.results.map((place) => {
-        resultIds.push(place.place_id);
+  fetch(
+    `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${query}&key=${key}`
+  )
+    .then((places) => places.json())
+    .then((places) => {
+      ids = places.results.map((place) => place.place_id);
+      details = ids.map((id) => {
+        return fetch(
+          `https://maps.googleapis.com/maps/api/place/details/json?placeid=${id}&key=${key}`
+        )
+          .then((detailed) => detailed.json())
+          .then((detailed) => detailed.result);
       });
-      resultIds.forEach((id) => {
-        axios
-          .get(
-            `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&key=${key}`
-          )
-          .then(({ data }) => {
-            let url = data.result.url;
-            let website = data.result.website;
-            let name = data.result.name;
-            results.push({ name, url, website });
-          })
-          .catch((err) => {
-            console.log(err);
-            res.status(STATUS_USER_ERROR);
-            res.send({ err: 'WTF' });
+      Promise.all(details)
+        .then((details) => {
+          details.forEach((place) => {
+            let { name, website, url } = place;
+            results.push({ name, website, url });
           });
-      });
-    })
-    .then(() => {
-      res.status(STATUS_SUCCESS);
-      res.send({ results });
-    })
-    .catch((err) => {
-      res.status(STATUS_USER_ERROR);
-      res.send({ err: 'Something has gone awry' });
+          res.status(STATUS_SUCCESS);
+          res.send({ results });
+        })
+        .catch((err) => {
+          res.status(STATUS_USER_ERROR);
+          res.send({ err: 'eesh' });
+        });
     });
 });
 
