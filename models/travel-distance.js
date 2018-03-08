@@ -14,7 +14,7 @@ function getDistances(query) {
       .then(ids => {
         resolve(ids);
       })
-      .catch(err => {
+      .catch(err =>  {
         reject(err);
       });
   });
