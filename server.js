@@ -9,33 +9,74 @@ const server = express();
 
 const STATUS_SUCCESSFUL = 200;
 const STATUS_USER_ERROR = 422;
+
 const detailsUrl = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=';
 const searchUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=';
 
 server.use(bodyParser.json());
 
 server.get('/place', (req, res) => {
-    const search = req.query.search;
-    const textSearch = searchUrl + search + `&key=${API_KEY}`;
+    let search = req.query.search.split(' ');
+    search = search.join('+');
+    const textSearch = searchUrl + search + '&key=' + API_KEY;
         // console.log(textSearch);
     fetch(textSearch)
-        .then(res => res.json())
-        .then(place => {
-            const results = place.results[0].place_id;
-            const urlDetail = detailsUrl + results + `&key=${API_KEY}`;
+        .then(places => places.json())
+        .then(places => {
+            const placeId = place.results[0].place_id;
+            const urlDetail = detailsUrl + placeId + '&key=' + API_KEY;
             fetch(urlDetail)
-                .then(res => res.json())
+                .then(details => details.json())
                 .then(details => {
                     res.status(STATUS_SUCCESSFUL);
-                    res.send(details);
+                    res.send(details.result);
                 })
+                .catch((err) => {
+                    console.log(err);
+                    res.status(STATUS_USER_ERROR);
+                    res.send({ err: err });
+                });
         })
         .catch((err) => {
+            console.log(err);
             res.status(STATUS_USER_ERROR);
-            res.send(err);
+            res.send({ err: err });
         });
     })
 
+server.get('/places', (req, res) => {
+    const search = req.query.search;
+    const searchUrl = searchUrl + search + '&key=' + API_KEY;
+    
+    fetch(searchUrl)
+        .then(places => places.json())
+        .then(places => {
+        placeIds = places.results.map(place => place.place_id);
+        details = placeIds.map(id => {
+            const detailsUrl = detailsUrl + id + '&key=' + API_KEY;
+            return fetch(detailsUrl)
+            .then(detailed => detailed.json())
+            .then(detailed => detailed.result);
+        });
+    
+        Promise.all(details)
+            .then(details => {
+            res.status(STATUS_SUCCESS);
+            res.send( {places: details} )
+            })
+            .catch(err => {
+            console.log(err)
+            res.status(STATUS_USER_ERROR);
+            res.send( {err: err});
+            });
+        })
+        .catch(err => {
+        console.log(err)
+        res.status(STATUS_USER_ERROR);
+        res.send( {err: err} );
+        });
+    });
+      
 server.listen(PORT, (err) => {
     if (err) console.error(err);
     else console.log(`Server is listening on port ${PORT}`);
