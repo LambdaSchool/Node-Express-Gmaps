@@ -8,6 +8,7 @@ const app = express();
 const PORT = config.port;
 
 app.use(placesController);
+app.use(distanceController);
 
 app.listen(PORT, () => {
   console.log(`server listening on http://localhost:${PORT}`);
