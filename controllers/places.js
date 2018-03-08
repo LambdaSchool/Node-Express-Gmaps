@@ -63,14 +63,21 @@ router.get('/places', (req, res) => {
 // Distance Matrix
 //===================================================================================================
 
-router.get('/travel/mode', (req, res) => {
-  const { origins, destination } = req.query;
-  getDistance(origins, destination)
-  .then((distance) => {
-    console.log(distance)
-    res.send(`The distance between ${origins} and ${destination} is ${distance}`);
-  })
 
+router.get('/travel/mode', (req, res) => {
+  const { origins, destination} = req.query;
+
+  getDistance(origins, destination).then((data) => {
+
+    let travelData = {
+      walking: data[1].rows[0].elements[0].duration,
+      transit: data[2].rows[0].elements[0].duration,
+      bicycling: data[3].rows[0].elements[0].duration,
+      driving: data[0].rows[0].elements[0].duration
+    };
+    
+    res.send(travelData);
+  });
 });
 
 
