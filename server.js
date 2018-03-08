@@ -27,7 +27,6 @@ server.get('/place', (req, res) => {
     fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${place}&key=${key}`)
       .then(res => res.json())
       .then(json => {
-        res.status()
         res.status(STATUS_SUCCESS);
         res.send(json.result);
       })
@@ -39,5 +38,36 @@ server.get('/place', (req, res) => {
     })
   })
 })
+
+server.get('/places', (req, res) => {
+  let { query } = req.query;
+  query = query.replace(/\s/g, '+');
+  let endpoint = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${query}&key=${key}`;
+  fetch(endpoint, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  })
+  .then(res => res.json())
+  .then(json => json.results)
+  .then(places => {
+    const promises = [];
+    places.forEach(place => {
+      promises.push(new Promise(resolve => {
+        fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${place.place_id}&key=${key}`)
+        .then(res => res.json())
+        .then(json => {
+          resolve(json.result);
+        })
+        .catch(error => {
+          console.error('An error ocurred while getting place information: ', error);
+        });
+      }));
+    });
+    Promise.all(promises)
+      .then(places => {
+        res.send(places);
+      });
+  });
+});
 
 server.listen(config.port);
