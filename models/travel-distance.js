@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const config = require('../config.js');
 
-const KEY_GMAPS_DISTANCES = config.gmaps.apiKey;
+const KEY_GMAPS_DISTANCES = config.gmaps.apiKey.distances;
 
 const URL_TRAVEL_DISTANCES = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=Seattle&destinations=San+Francisco&key=${KEY_GMAPS_DISTANCES}`
 
