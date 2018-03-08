@@ -108,9 +108,9 @@ server.get('/places', (req, res) => {
           res.send('Error fetching places.');
         });
       Promise.all(promiseArr).then(() => {
-        const bestModeIndex = dataArr.reduce((bestMode, mode, index) => {
-          return mode.rows[0].elements[0].duration.value < bestMode ? index : mode, dataArr[0].rows[0].elements[0].duration.value;
-        });
+        const bestModeIndex = dataArr.reduce((bestIndex, mode, currentIndex) => {
+          return mode.rows[0].elements[0].duration.value < dataArr[bestIndex].rows[0].elements[0].duration.value ? currentIndex : bestindex;
+        }, 0);
         const bestModeTimeText = dataArr[bestModeIndex].rows[0].elements[0].duration.text;
         const bestModeName = ['driving', 'walking', 'bicycling', 'transit'][bestModeIndex];
         const bestTransportation = { mode: bestModeName, time: bestModeTimeText, };
