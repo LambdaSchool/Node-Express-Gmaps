@@ -15,35 +15,27 @@ const searchUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?qu
 server.use(bodyParser.json());
 
 server.get('/place', (req, res) => {
-
     const search = req.query.search;
-        console.log(search);
-        const textSearch = searchUrl + search + `&key=${API_KEY}`;
-        console.log(textSearch);
-    
-
+    const textSearch = searchUrl + search + `&key=${API_KEY}`;
+        // console.log(textSearch);
     fetch(textSearch)
         .then(res => res.json())
         .then(place => {
-            
             const results = place.results[0].place_id;
-                
-                fetch(detailsUrl + results + `&key=${API_KEY}`)
-                    .then(res => res.json())
-                    .then(details => {
-                        res.status(STATUS_SUCCESSFUL);
-                        res.send(details);
-                    })
-                    
-                    
-
-         })
+            const urlDetail = detailsUrl + results + `&key=${API_KEY}`;
+            fetch(urlDetail)
+                .then(res => res.json())
+                .then(details => {
+                    res.status(STATUS_SUCCESSFUL);
+                    res.send(details);
+                })
+        })
         .catch((err) => {
             res.status(STATUS_USER_ERROR);
-            res.send({ err });
-
+            res.send(err);
         });
-    })    
+    })
+
 server.listen(PORT, (err) => {
     if (err) console.error(err);
     else console.log(`Server is listening on port ${PORT}`);
