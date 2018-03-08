@@ -4,7 +4,7 @@ const router = express.Router();
 const {
   getPlaceIDs,
   getDetails
-} = require('../models/model');
+} = require('../models/PlacesModel');
 
 const STATUS_USER_ERROR = 422;
 

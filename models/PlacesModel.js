@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const config = require('../config');
 
-const API_KEY = config.gmaps.apiKey;
+const API_KEY = config.gmaps.PlacesAPIKey;
 const STATUS_USER_ERROR = 422;
 const SEARCH_REQUEST = 'https://maps.googleapis.com/maps/api/place/textsearch/';
 //https://maps.googleapis.com/maps/api/place/textsearch/json?query=123+main+street&key=YOUR_API_KEY
