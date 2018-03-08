@@ -1,12 +1,12 @@
 const express = require('express');
 
 const config = require('../config.js');
-// const distanceController = require('./controllers/distance.js');
+const distanceController = require('./controllers/distance.js');
 
 const app = express();
 const PORT = config.port;
 
-// app.use(distanceController);
+app.use(distanceController);
 
 app.listen(PORT, err => {
   if (err) {
