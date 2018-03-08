@@ -20,7 +20,6 @@ server.get('/place', (req, res) => {
 });
 
 server.get('/places', (req, res) => {
-  const promises = [];
   fetch(
     `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${
       req.query.location
@@ -28,17 +27,14 @@ server.get('/places', (req, res) => {
   )
     .then((res) => res.json())
     .then((json) => {
-      json.results.forEach((result) => {
-        promises.push(
-          fetch(
+      const promises = json.results.map((result) => {
+          return fetch(
             `https://maps.googleapis.com/maps/api/place/details/json?placeid=${
               result.place_id
             }&key=${config.gmaps.apiKey}`
           )
             .then((res) => res.json())
-            .then((json) => json)
             .catch((err) => console.error(err))
-        );
       });
 
       Promise.all(promises)
