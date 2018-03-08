@@ -27,7 +27,7 @@ server.get("/place", (req, res) => {
     .then(place => {
       fetch(`${url}/details/json?placeid=${place}&key=${MAP_KEY}`)
         .then(res => res.json())
-        .then(json => {
+        .tbhen(json => {
           res.send({ STATUS_SUCCESS: json.result });
         })
         .catch(err => {
@@ -39,7 +39,7 @@ server.get("/place", (req, res) => {
     });
 });
 
-server.get('/places', (req, res) => {
+server.get("/places", (req, res) => {
   const { search } = req.query;
 
   fetch(`${url}/textsearch/json?query=${search}&key=${MAP_KEY}`)
@@ -49,32 +49,57 @@ server.get('/places', (req, res) => {
       const promises = [];
 
       places.forEach(place => {
-        promises.push(new Promise(resolve => {
-          fetch(`${url}/details/json?placeid=${place.place_id}&key=${MAP_KEY}`)
-            .then(res => res.json())
-            .then(json => {
-              resolve(json.result);
-            })
-            .catch(err => {
-              res.status(STATUS_USER_ERROR);
-              res.send({ error: "Error fetching place details" });
-            });
+        promises.push(
+          new Promise(resolve => {
+            fetch(
+              `${url}/details/json?placeid=${place.place_id}&key=${MAP_KEY}`
+            )
+              .then(res => res.json())
+              .then(json => {
+                resolve(json.result);
+              })
+              .catch(err => {
+                res.status(STATUS_USER_ERROR);
+                res.send({ error: "Error fetching place details" });
+              });
+          })
+        );
+      });
 
-        }));
-        });
-
-      Promise.all(promises)
-        .then(data => {
-          res.status(STATUS_SUCCESS);
-          res.send(data);
-        });
-      })
+      Promise.all(promises).then(data => {
+        res.status(STATUS_SUCCESS);
+        res.send(data);
+      });
+    })
     .catch(err => {
       res.status(STATUS_USER_ERROR);
       res.send({ error: "Error fetching nearby places" });
     });
 });
 
+server.get("/places", (req, res) => {
+  const { search } = req.query;
+  if (!search) {
+    res.send({ STATUS_USER_ERROR: "Input a place" });
+    return;
+  }
+  fetch(`${url}/textsearch/json?query=${search}&key=${MAP_KEY}`)
+    .then(res => res.json())
+    .then(json => {
+      const listOfPlaces = json.results.map(result => {
+        return fetch(
+          `${url}/details/json?placeid=${result.place_id}&key=${MAP_KEY}`
+        )
+          .then(res => res.json())
+          .catch(err => res.send(STATUS_USER_ERROR));
+      });
+      Promise.all(listOfPlaces).then(response => {
+        res.status(STATUS_SUCCESS);
+        res.json(response);
+      });
+    })
+    .catch(error => res.send(STATUS_USER_ERROR));
+});
 
 server.listen(PORT, err => {
   if (err) {
