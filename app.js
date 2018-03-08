@@ -6,7 +6,7 @@ const app = express();
 
 const PORT = config.port;
 
-app.use(placeController);
+app.use(placesController);
 
 app.listen(PORT, err => {
   if (err) {

@@ -29,8 +29,8 @@ function getDetails(ids) {
         .then(details => details.result);
   });
   Promise.all(detailsArray)
-    .then(detail => {
-      resolve(detailsArray);
+    .then(details => {
+      resolve(details);
     })
     .catch(err => {
       reject(err);
