@@ -1,4 +1,4 @@
-config = require('./config.js');
+const config = require('./config.js');
 const express = require('express');
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
