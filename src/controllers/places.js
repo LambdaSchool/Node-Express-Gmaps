@@ -33,4 +33,18 @@ router.get('/places', (req, res) => {
     });
 });
 
+router.get('/travel/mode', (req, res) => {
+  const { origin, des } = req.query;
+  getDistance(origin, des)
+  //   .then(getDetails)
+  //   .then((details) => {
+  //     res.status(STATUS_SUCCESS);
+  //     res.send({ places: details });
+  //   })
+  //   .catch((err) => {
+  //     res.status(STATUS_USER_ERROR);
+  //     res.send({ err: 'Couldn\'t get details for all results'  });
+  //   });
+});
+
 module.exports = router;
