@@ -7,7 +7,6 @@ const server = express();
 const PORT = port;
 
 const API_KEY = gmaps.apiKey;
-const DISTANCE_API_KEY = gmaps.distanceApiKey;
 
 const STATUS_USER_ERROR = 422;
 
@@ -24,7 +23,7 @@ server.get('/place', (req, res) => {
     })
     .then((details) => {
       res.status(200);
-      res.send(details);
+      res.json(details);
     })
     .catch((err) => {
       res.status(STATUS_USER_ERROR);
