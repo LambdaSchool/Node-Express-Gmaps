@@ -35,40 +35,39 @@ server.get("/place", (req, res) => {
     });
 });
 
-// server.get("/places", (req, res) => {
-//   const { term } = req.query;
-//   fetch(`${PLACE_SEARCH_URL}query=${term}&key=${KEY}`)
-//     .then(res => res.json())
-//     .then(json => json.results)
-//     .then(places => {
-//       const promisesArr = [];
-//       places.forEach(place => {
-//         promisesArr.push(
-//           new Promise(resolve => {
-//             fetch(`${PLACE_DETAILS_URL}placeid=${place.place_id}&key=${KEY}`)
-//               .then(res => res.json())
-//               .then(json => {
-//                 resolve(json.result);
-//               })
-//               .catch(err => {
-//                 res.status(422);
-//                 res.send({ error: err });
-//               });
-//           })
-//         );
-//       });
-//       // console.log(promisesArr);
-//       Promise.all(promisesArr)
-//         .then(data => {
-//           res.status(200);
-//           res.send(data);
-//       });
-//     })
-//     .catch(err => {
-//       res.status(422);
-//       res.send({ error: err });
-//     });
-// });
+ server.get("/places", (req, res) => {
+   const { term } = req.query;
+   fetch(`${PLACE_SEARCH_URL}query=${term}&key=${KEY}`)
+     .then(res => res.json())
+     .then(json => json.results)
+     .then(places => {
+       const promisesArr = [];
+       places.forEach(place => {
+         promisesArr.push(
+           new Promise(resolve => {
+             fetch(`${PLACE_DETAILS_URL}placeid=${place.place_id}&key=${KEY}`)
+               .then(res => res.json())
+               .then(json => {
+                 resolve(json.result);
+               })
+               .catch(err => {
+                 res.status(422);
+                 res.send({ error: err });
+               });
+           })
+         );
+       });
+       Promise.all(promisesArr)
+         .then(data => {
+           res.status(200);
+           res.send(data);
+       });
+     })
+     .catch(err => {
+       res.status(422);
+       res.send({ error: err });
+    });
+ });
 
 
 server.listen(PORT, err => {
