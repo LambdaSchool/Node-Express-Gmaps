@@ -1,0 +1,31 @@
+{
+  "name": "node-express-gmaps",
+  "version": "1.0.0",
+  "description": "Topics:  * APIs  * API Documentation  * Rate Limits  * Multiple requests",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/didacta/Node-Express-Gmaps.git"
+  },
+  "keywords": [
+    "Using",
+    "google",
+    "places",
+    "API"
+  ],
+  "author": "Igor Yermak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/didacta/Node-Express-Gmaps/issues"
+  },
+  "homepage": "https://github.com/didacta/Node-Express-Gmaps#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "node-fetch": "^2.1.1"
+  }
+}
