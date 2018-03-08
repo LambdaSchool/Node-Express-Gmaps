@@ -4,8 +4,8 @@ const bodyParser = require("body-parser");
 const fetch = require("node-fetch");
 
 const PORT = config.port;
-const KEY = config.gmaps.apiKey;
-const QUERY = "coffee+shops+in+Seattle";
+const KEY_PLACE = config.gmaps.apiKey.place_search;
+const KEY_DISTANCE = config.gmaps.apiKey.distance_matrix
 const PLACE_SEARCH_URL = `https://maps.googleapis.com/maps/api/place/textsearch/json?`;
 const PLACE_DETAILS_URL = `https://maps.googleapis.com/maps/api/place/details/json?`;
 
@@ -16,14 +16,14 @@ server.get("/place", (req, res) => {
   let { term } = req.query;
   let searchResult = {};
   let placeId = "";
-  fetch(`${PLACE_SEARCH_URL}query=${term}&key=${KEY}`)
+  fetch(`${PLACE_SEARCH_URL}query=${term}&key=${KEY_PLACE}`)
     .then(res => res.json())
     .then(json => {
       searchResult = json.results[0];
       placeId = searchResult.place_id;
     })
     .then(() => {
-      fetch(`${PLACE_DETAILS_URL}placeid=${placeId}&key=${KEY}`)
+      fetch(`${PLACE_DETAILS_URL}placeid=${placeId}&key=${KEY_PLACE}`)
         .then(res => res.json())
         .then(json => {
           res.status(200);
@@ -38,12 +38,12 @@ server.get("/place", (req, res) => {
  server.get("/places", (req, res) => {
    const { term } = req.query;
 
-   fetch(`${PLACE_SEARCH_URL}query=${term}&key=${KEY}`)
+   fetch(`${PLACE_SEARCH_URL}query=${term}&key=${KEY_PLACE}`)
      .then(res => res.json())
      .then(places => {
        placeIds = places.results.map(place => place.place_id);
        promisesArr = placeIds.map(id => {
-         return fetch(`${PLACE_DETAILS_URL}placeid=${id}&key=${KEY}`)
+         return fetch(`${PLACE_DETAILS_URL}placeid=${id}&key=${KEY_PLACE}`)
          .then(details => details.json())
          .then(details => details.result)
          .catch(err => {
