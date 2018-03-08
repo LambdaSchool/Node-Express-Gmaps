@@ -18,7 +18,6 @@ server.get("/place", (req, res) => {
     .then(res => res.json())
     .then(ids => ids.results[0])
     .then((place) => {
-      console.log()
       fetch(`${PLACE_DETAILS_URL}placeid=${place.place_id}&key=${KEY_PLACE}`)
         .then(res => res.json())
         .then(json => {
@@ -31,33 +30,54 @@ server.get("/place", (req, res) => {
     });
 });
 
- server.get("/places", (req, res) => {
-   const { term } = req.query;
+function getIds(term) {
+  return new Promise((resolve, reject) => {
+    fetch(`${PLACE_SEARCH_URL}query=${term}&key=${KEY_PLACE}`)
+      .then(res => res.json())
+      .then(places => places.results.map(place => place.place_id))
+      .then(ids => {
+        resolve(ids);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
 
-   fetch(`${PLACE_SEARCH_URL}query=${term}&key=${KEY_PLACE}`)
-     .then(res => res.json())
-     .then(places => {
-       placeIds = places.results.map(place => place.place_id);
-       promisesArr = placeIds.map(id => {
-         return fetch(`${PLACE_DETAILS_URL}placeid=${id}&key=${KEY_PLACE}`)
-         .then(details => details.json())
-         .then(details => details.result)
-         .catch(err => {
-           res.status(422);
-           res.send({ error: err});
-         })
-         });
-       Promise.all(promisesArr)
-         .then(details => {
-           res.status(200);
-           res.send(details);
-       });
-     })
-     .catch(err => {
-       res.status(422);
-       res.send({ error: err });
+function getDetails(ids) {
+  console.log(ids)
+  return new Promise((resolve, reject) => {
+    const details = ids.map(id => {
+      return fetch(`${PLACE_DETAILS_URL}placeid=${id}&key=${KEY_PLACE}`)
+        .then(details => details.json())
+        .then(details => details.result)
     });
- });
+
+    Promise.all(details)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
+
+server.get("/places", (req, res) => {
+  const { term } = req.query;
+  getIds(term)
+    .then(ids => {
+      getDetails(ids)
+      .then(details => {
+          res.status(200)
+          res.send(details)
+        })
+        .catch(err => {
+          res.status(422)
+          res.send({ error: 'Error in the /places request' })
+        })
+    })
+})
 
 
 server.listen(PORT, err => {
