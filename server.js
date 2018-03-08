@@ -37,30 +37,24 @@ server.get("/place", (req, res) => {
 
  server.get("/places", (req, res) => {
    const { term } = req.query;
+
    fetch(`${PLACE_SEARCH_URL}query=${term}&key=${KEY}`)
      .then(res => res.json())
-     .then(json => json.results)
      .then(places => {
-       const promisesArr = [];
-       places.forEach(place => {
-         promisesArr.push(
-           new Promise(resolve => {
-             fetch(`${PLACE_DETAILS_URL}placeid=${place.place_id}&key=${KEY}`)
-               .then(res => res.json())
-               .then(json => {
-                 resolve(json.result);
-               })
-               .catch(err => {
-                 res.status(422);
-                 res.send({ error: err });
-               });
-           })
-         );
-       });
+       placeIds = places.results.map(place => place.place_id);
+       promisesArr = placeIds.map(id => {
+         return fetch(`${PLACE_DETAILS_URL}placeid=${id}&key=${KEY}`)
+         .then(details => details.json())
+         .then(details => details.result)
+         .catch(err => {
+           res.status(422);
+           res.send({ error: err});
+         })
+         });
        Promise.all(promisesArr)
-         .then(data => {
+         .then(details => {
            res.status(200);
-           res.send(data);
+           res.send(details);
        });
      })
      .catch(err => {
