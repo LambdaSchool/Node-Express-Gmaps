@@ -19,11 +19,11 @@ server.get('/place', (req, res) => {
     let search = req.query.search.split(' ');
     search = search.join('+');
     const textSearch = searchUrl + search + '&key=' + API_KEY;
-        // console.log(textSearch);
+    // console.log(textSearch);
     fetch(textSearch)
         .then(places => places.json())
         .then(places => {
-            const placeId = place.results[0].place_id;
+            const placeId = places.results[0].place_id;
             const urlDetail = detailsUrl + placeId + '&key=' + API_KEY;
             fetch(urlDetail)
                 .then(details => details.json())
@@ -46,22 +46,21 @@ server.get('/place', (req, res) => {
 
 server.get('/places', (req, res) => {
     const search = req.query.search;
-    const searchUrl = searchUrl + search + '&key=' + API_KEY;
-    
-    fetch(searchUrl)
+    const placesURL = searchUrl + search + '&key=' + API_KEY;
+    fetch(placesURL)
         .then(places => places.json())
         .then(places => {
         placeIds = places.results.map(place => place.place_id);
         details = placeIds.map(id => {
-            const detailsUrl = detailsUrl + id + '&key=' + API_KEY;
-            return fetch(detailsUrl)
+            const detailedURL = detailsUrl + id + '&key=' + API_KEY;
+            return fetch(detailedURL)
             .then(detailed => detailed.json())
             .then(detailed => detailed.result);
         });
     
         Promise.all(details)
             .then(details => {
-            res.status(STATUS_SUCCESS);
+            res.status(STATUS_SUCCESSFUL);
             res.send( {places: details} )
             })
             .catch(err => {
@@ -77,7 +76,15 @@ server.get('/places', (req, res) => {
         });
     });
       
-server.listen(PORT, (err) => {
-    if (err) console.error(err);
-    else console.log(`Server is listening on port ${PORT}`);
-});
+// server.listen(PORT, (err) => {
+//     if (err) console.error(err);
+//     else console.log(`Server is listening on port ${PORT}`);
+// });
+
+server.listen(PORT, err => {
+    if (err) {
+      console.log(`Error starting server: ${err}`);
+    } else {
+      console.log(`Server listening on port ${PORT}`);
+    }
+  });
