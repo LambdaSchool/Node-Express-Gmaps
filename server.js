@@ -18,7 +18,7 @@ server.get('/place',(req,res) =>{
             fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${place.results[0].place_id}&key=${myKey}`)
             .then(res => res.json())
             .then(detail => {
-                // console.log(detail);
+            
                 res.status(200);
                 res.send({detail});
             })
@@ -32,28 +32,36 @@ server.get('/place',(req,res) =>{
         res.status(422);
         res.send({error:"error occured"});
 });
-    //return 
+    
 })
 
-// server.get(‘/place/id’,(req,res) =>{
-
-//   const placeDetails = req.query;
-
-//   fetch(`https://maps.googleapis.com/maps/api/place/details/json?query=${placeName}&key=${myKey}`)
-
-//   .then(res => res.json())
-
-//   .then(body =>body.results)
-
-//   .catch(err =>{
-
-//       res.status(422);
-
-//       res.send({error:“error occured”});
-
-// });
-
-// })
+server.get('/places',(req,res) => {
+  const placeNames = req.query.search;
+  fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${placeNames}&key=${myKey}`)
+  .then(res => res.json())
+  .then(places => { // got places object.
+    console.log(places);
+     const placeIds = places.results.map(place => place.place_id);
+     const details = placeIds.map(id => {
+      return fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${id}&key=${myKey}`)
+        .then(detailed => detailed.json())
+        .then(detailed => detailed.result);
+})
+     Promise.all(details) 
+     .then(details => {
+      res.status(200);
+      res.send({places: details})
+     })
+     .catch(err =>{
+        res.status(422);
+        res.send({error:"error occured"});
+    })
+})
+  .catch(err =>{
+        res.status(422);
+        res.send({error:"error occured"});
+})
+})
 
 server.listen(PORT, err => {
     if(err) {
@@ -61,4 +69,4 @@ server.listen(PORT, err => {
     } else {
         console.log(`Server is listening on PORT number ${PORT}`);
     }
-});
+})
