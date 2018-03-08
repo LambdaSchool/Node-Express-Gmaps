@@ -4,7 +4,7 @@ const router = express.Router();
 const STATUS_SUCCESS = 200;
 const STATUS_USER_ERROR = 422;
 
-const { getIds, getDetails } = require('../models/places.js');
+const { getIds, getDetails, getDistance } = require('../models/places.js');
 
 router.get('/place', (req, res) => {
   getIds(req.query.location)
@@ -36,6 +36,7 @@ router.get('/places', (req, res) => {
 router.get('/travel/mode', (req, res) => {
   const { origin, des } = req.query;
   getDistance(origin, des)
+    .then((modes) => console.log(modes))
   //   .then(getDetails)
   //   .then((details) => {
   //     res.status(STATUS_SUCCESS);

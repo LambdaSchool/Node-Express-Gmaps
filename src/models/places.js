@@ -48,18 +48,25 @@ function getDistance(origin, des) {
         '&origins=' +
         origin +
         '&destinations=' +
+        des +
         '&mode=' +
         mode +
         '&key=' +
         KEY_GMAPS_DISTANCE;
       fetch(distanceUrl)
-        .then()
-        .catch();
+        .then((distance) => distance.json())
+        .then((distance) => distance.rows[0].elements[0].duration.value)
+        .then((distance) => resolve(distance))
+        .catch((err) => reject(err));
     });
-  });
+    Promise.all(modes)
+      .then((distances) => resolve(distances))
+      .catch((err) => reject(err));
+  }).catch((err) => reject(err));
 }
 
 module.exports = {
   getIds,
   getDetails,
+  getDistance,
 };
