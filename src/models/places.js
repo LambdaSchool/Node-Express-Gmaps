@@ -13,15 +13,9 @@ function getIds(query) {
     const searchUrl = URI_TEXT_SEARCH + query + '&key=' + KEY_GMAPS_PLACES;
     fetch(searchUrl)
       .then((places) => places.json())
-      .then(
-        ((places) => places.results.map((place) => place.place_id))
-          .then((ids) => {
-            resolve(ids);
-          })
-          .catch((err) => {
-            reject(err);
-          })
-      );
+      .then((places) => places.results.map((place) => place.place_id))
+      .then((ids) => resolve(ids))
+      .catch((err) => reject(err));
   });
 }
 
@@ -38,5 +32,10 @@ function getDetails(ids) {
         resolve(details);
       })
       .catch((err) => reject(err));
-  }).catch((err) => console.error(err));
+  }).catch((err) => reject(err));
 }
+
+module.exports = {
+  getIds,
+  getDetails,
+};
