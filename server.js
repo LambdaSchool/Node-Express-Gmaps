@@ -20,7 +20,7 @@ server.get('/place', (req, res) => {
 });
 
 server.get('/places', (req, res) => {
-  let promises;
+  let promises = [];
   fetch(
     `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${
       req.query.location
@@ -41,10 +41,11 @@ server.get('/places', (req, res) => {
       });
     })
     .catch((err) => console.error(err));
-
+console.log(promises);
   Promise.all(promises)
     .then((responses) => {
-      return res.status(200), res.send(responses);
+      res.status(200);
+      res.send(responses);
     })
     .catch((err) => console.error(err));
 });
