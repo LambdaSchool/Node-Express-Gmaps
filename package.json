@@ -1,0 +1,24 @@
+{
+  "name": "node-express-gmaps",
+  "version": "1.0.0",
+  "description": "Topics:  * APIs  * API Documentation  * Rate Limits  * Multiple requests",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.16.2",
+    "node-fetch": "^2.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danitacheny/Node-Express-Gmaps.git"
+  },
+  "author": "PR",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danitacheny/Node-Express-Gmaps/issues"
+  },
+  "homepage": "https://github.com/danitacheny/Node-Express-Gmaps#readme"
+}
