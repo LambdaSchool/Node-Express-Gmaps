@@ -6,7 +6,8 @@ const STATUS_USER_ERROR = 422;
 
 const {
   getIds,
-  getDetails
+  getDetails,
+  getTravel,
 } = require('../models/places.js');
 
 router.get('/place', (req, res) => {
@@ -31,6 +32,19 @@ router.get('/places', (req, res) => {
     .then(details => {
       res.status(STATUS_SUCCESS);
       res.send( {places: details} );
+    })
+    .catch(err => {
+      res.status(STATUS_USER_ERROR);
+      res.send( {err: err} );
+    });
+});
+
+router.get('/travel/mode', (req, res) => {
+  const { origin, destination, mode } = req.query;
+  getTravel(origin, destination, mode)
+    .then(details => {
+      res.status(STATUS_SUCCESS);
+      res.send( {results: details} );
     })
     .catch(err => {
       res.status(STATUS_USER_ERROR);
