@@ -28,3 +28,20 @@ Topics:
  * Places API: https://developers.google.com/places/web-service/
  * Place Search: https://developers.google.com/places/web-service/search
  * Place Details: https://developers.google.com/places/web-service/details
+ * Request Library: https://github.com/bitinn/node-fetch
+
+# Day II
+
+## Project Requirements
+* Create an enpoint called `/travel/mode` that returns the quickest method of travel given two locations, as well as the travel time. It should account for driving, walking, bicycling, and transit.
+
+## Project Notes
+* You will need a separate key than what you've used for the Places API since it is actually a different API.
+* For best results, try to pick locations that should indeed have transit available.
+
+## Stretch Problem
+* Include this comparison information in the information your return from `/place`.
+
+## Resources
+ * Distance Matrix API: https://developers.google.com/places/web-service/
+ * Travel Mode Section: https://developers.google.com/maps/documentation/distance-matrix/intro#travel_modes
