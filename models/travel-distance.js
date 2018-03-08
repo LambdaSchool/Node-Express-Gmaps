@@ -3,7 +3,7 @@ const config = require("../config.js");
 
 const starterUrl = "https://maps.googleapis.com/maps/api/distancematrix";
 
-const KEY_GMAPS_DISTANCES = config.gmaps.apiKey;
+const KEY_GMAPS_DISTANCES = config.gmaps.apiKey.distances;
 
 
 function getDistances(start = "los+angeles", finish = "new+york") {
