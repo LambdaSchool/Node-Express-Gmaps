@@ -1,14 +1,12 @@
 const express = require('express');
-const fetch = require('node-fetch');
 const config = require('./config.js');
+const placesController = require('./controllers/');
 
-const server = express();
-
+const app = express();
 
 const PORT = config.port;
 
-app.use();
-
+app.use(placeController);
 
 app.listen(PORT, err => {
   if (err) {
