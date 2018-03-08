@@ -1,48 +1,16 @@
 const express = require('express');
-const config = require('./config.js');
-const fetch = require('node-fetch');
+const config = require('../config.js');
+const placesController = require('.controllers/places.js');
 
-const server = express();
+const app = express();
+const PORT = config.port;
 
-server.listen(config.port);
+app.use(placesController);
 
-server.get('/place', (req, res) => {
-  fetch(
-    `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${
-      req.query.location
-    }&key=${config.gmaps.apiKey}`
-  )
-    .then((res) => res.json())
-    .then((json) => {
-      return res.status(200), res.send(json.results[0]);
-    })
-    .catch((err) => console.error(err));
-});
-
-server.get('/places', (req, res) => {
-  fetch(
-    `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${
-      req.query.location
-    }&key=${config.gmaps.apiKey}`
-  )
-    .then((res) => res.json())
-    .then((json) => {
-      const promises = json.results.map((result) => {
-          return fetch(
-            `https://maps.googleapis.com/maps/api/place/details/json?placeid=${
-              result.place_id
-            }&key=${config.gmaps.apiKey}`
-          )
-            .then((res) => res.json())
-            .catch((err) => console.error(err))
-      });
-
-      Promise.all(promises)
-        .then((responses) => {
-          res.status(200);
-          res.send(responses);
-        })
-        .catch((err) => console.error(err));
-    })
-    .catch((err) => console.error(err));
+app.listen(PORT, err => {
+  if (err) {
+    console.log(`Error starting server: ${err}`);
+  } else {
+    console.log(`App listening on port ${PORT}`);
+  }
 });
