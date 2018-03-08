@@ -24,30 +24,52 @@ server.get("/place", (req, res) => {
     })
     .then(() => {
       fetch(`${PLACE_DETAILS_URL}placeid=${placeId}&key=${KEY}`)
-      .then(res => res.json())
-      .then(json => {
-        console.log(json);
-        res.status(200);
-        res.send(json);
-      });
+        .then(res => res.json())
+        .then(json => {
+          res.status(200);
+          res.send(json);
+        });
     })
     .catch(err => {
-      console.log(`There was an error: ${err}`)
-    })
+      console.log(`There was an error: ${err}`);
+    });
 });
 
 // server.get("/places", (req, res) => {
-//   let { term } = req.query;
-//   let searchResult = {};
-//   let placeIds = [];
+//   const { term } = req.query;
 //   fetch(`${PLACE_SEARCH_URL}query=${term}&key=${KEY}`)
 //     .then(res => res.json())
-//     .then(json => {
-//       placeIds = json.results.map((place) => {
-//         return place.place_id;
-//       })
+//     .then(json => json.results)
+//     .then(places => {
+//       const promisesArr = [];
+//       places.forEach(place => {
+//         promisesArr.push(
+//           new Promise(resolve => {
+//             fetch(`${PLACE_DETAILS_URL}placeid=${place.place_id}&key=${KEY}`)
+//               .then(res => res.json())
+//               .then(json => {
+//                 resolve(json.result);
+//               })
+//               .catch(err => {
+//                 res.status(422);
+//                 res.send({ error: err });
+//               });
+//           })
+//         );
+//       });
+//       // console.log(promisesArr);
+//       Promise.all(promisesArr)
+//         .then(data => {
+//           res.status(200);
+//           res.send(data);
+//       });
 //     })
+//     .catch(err => {
+//       res.status(422);
+//       res.send({ error: err });
+//     });
 // });
+
 
 server.listen(PORT, err => {
   if (err) {
