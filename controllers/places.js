@@ -7,15 +7,16 @@ const KEY = config.gmaps.apiKey;
 const express = require('express');
 
 
+
 const router = express.Router();
 
 //==================================================================================================
 // IMPORTS
 //==================================================================================================
 
-// const {
-//   fetchDetails
-// } = require('../models/places.js');
+const {
+  getDistance
+} = require('../models/places.js');
 
 //===================================================================================================
 // Create an endpoint `/place` that, provided a query, returns the detailed information about 
@@ -33,10 +34,10 @@ router.get('/place', (req, res) => {
   });
 });
 
-// //===================================================================================================
-// // Create an endpoint `/places` that, provided a query returns the detailed information about ALL 
-// // places returned to you from `Place Search`.
-// //===================================================================================================
+//===================================================================================================
+// Create an endpoint `/places` that, provided a query returns the detailed information about ALL 
+// places returned to you from `Place Search`.
+//===================================================================================================
 
 async function fetchDetails(results){
   const details = [];
@@ -57,6 +58,22 @@ router.get('/places', (req, res) => {
     promise.then(details => res.send(details));
   })
 });
+
+//===================================================================================================
+// Distance Matrix
+//===================================================================================================
+
+router.get('/travel/mode', (req, res) => {
+  const { origins, destination } = req.query;
+  getDistance(origins, destination)
+  .then((distance) => {
+    console.log(distance)
+    res.send(`The distance between ${origins} and ${destination} is ${distance}`);
+  })
+
+});
+
+
 
 // Catch All
 router.get('*', (req, res) => {
