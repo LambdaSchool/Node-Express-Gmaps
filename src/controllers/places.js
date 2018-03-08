@@ -41,4 +41,4 @@ router.get('/places', (req, res) => {
     });
 });
 
-moduel.exports = router;
+module.exports = router;

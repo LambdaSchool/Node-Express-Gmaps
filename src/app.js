@@ -1,7 +1,8 @@
 const express =  require('express');
 
-const config = require('./config.js');
+const config = require('../config');
 const placesController = require('./controllers/places.js');
+const distanceController = require('./controllers/distance.js');
 
 const app = express();
 const PORT = config.port;
