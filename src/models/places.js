@@ -2,10 +2,15 @@ const fetch = require('node-fetch');
 const config = require('../../config.js');
 
 const KEY_GMAPS_PLACES = config.gmaps.apiKey;
+const KEY_GMAPS_DISTANCE = config.gmaps.distanceKey;
 const URI_TEXT_SEARCH =
   'https://maps.googleapis.com/maps/api/place/textsearch/json?query=';
 const URI_PLACE_DETAILS =
   'https://maps.googleapis.com/maps/api/place/details/json?placeid=';
+const URI_DISTANCE_MATRIX =
+  'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial';
+
+const DISTANCE_MODES = ['driving', 'walking', 'bicycling', 'transit'];
 
 // Functions go here
 function getIds(query) {
@@ -33,6 +38,25 @@ function getDetails(ids) {
       })
       .catch((err) => reject(err));
   }).catch((err) => reject(err));
+}
+
+function getDistance(origin, des) {
+  return new Promise((resolve, reject) => {
+    const modes = DISTANCE_MODES.map((mode) => {
+      distanceUrl =
+        URI_DISTANCE_MATRIX +
+        '&origins=' +
+        origin +
+        '&destinations=' +
+        '&mode=' +
+        mode +
+        '&key=' +
+        KEY_GMAPS_DISTANCE;
+      fetch(distanceUrl)
+        .then()
+        .catch();
+    });
+  });
 }
 
 module.exports = {
