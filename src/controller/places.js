@@ -7,3 +7,9 @@ const STATUS_USER_ERROR = 422;
 const {
   // Functions are imported here
 } = require('../models/plages.js');
+
+router.get('/place', (req, res) => {
+}
+
+router.get('/places', (req, res) => {
+}
