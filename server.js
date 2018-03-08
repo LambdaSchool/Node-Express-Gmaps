@@ -20,7 +20,7 @@ server.get('/place', (req, res) => {
 });
 
 server.get('/places', (req, res) => {
-  let promises = [];
+  const promises = [];
   fetch(
     `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${
       req.query.location
@@ -28,24 +28,25 @@ server.get('/places', (req, res) => {
   )
     .then((res) => res.json())
     .then((json) => {
-      promises = json.results.map((result) => {
-        return fetch(
-          `https://maps.googleapis.com/maps/api/place/details/json?placeid=${
-            result.id
-          }&key=${config.gmaps.apiKey}`
-        )
-          .then((res) => {
-            return res;
-          })
-          .catch((err) => console.error(err));
+      json.results.forEach((result) => {
+        promises.push(
+          fetch(
+            `https://maps.googleapis.com/maps/api/place/details/json?placeid=${
+              result.place_id
+            }&key=${config.gmaps.apiKey}`
+          )
+            .then((res) => res.json())
+            .then((json) => json)
+            .catch((err) => console.error(err))
+        );
       });
-    })
-    .catch((err) => console.error(err));
-console.log(promises);
-  Promise.all(promises)
-    .then((responses) => {
-      res.status(200);
-      res.send(responses);
+
+      Promise.all(promises)
+        .then((responses) => {
+          res.status(200);
+          res.send(responses);
+        })
+        .catch((err) => console.error(err));
     })
     .catch((err) => console.error(err));
 });
