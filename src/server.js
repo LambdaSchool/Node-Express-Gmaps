@@ -14,16 +14,12 @@ server.use(bodyParser.json());
 
 server.get("/place", (req, res) => {
   let { term } = req.query;
-  let searchResult = {};
-  let placeId = "";
   fetch(`${PLACE_SEARCH_URL}query=${term}&key=${KEY_PLACE}`)
     .then(res => res.json())
-    .then(json => {
-      searchResult = json.results[0];
-      placeId = searchResult.place_id;
-    })
-    .then(() => {
-      fetch(`${PLACE_DETAILS_URL}placeid=${placeId}&key=${KEY_PLACE}`)
+    .then(ids => ids.results[0])
+    .then((place) => {
+      console.log()
+      fetch(`${PLACE_DETAILS_URL}placeid=${place.place_id}&key=${KEY_PLACE}`)
         .then(res => res.json())
         .then(json => {
           res.status(200);
