@@ -1,0 +1,76 @@
+https.get(url, function(response) {  
+    /*
+    response = {
+        data :{chunk:} ,
+
+    }
+    response ={
+        end:
+    }
+    */
+    console.log("got something");
+  var body ='';
+  response.on('data', function(chunk) {
+      //console.log(chunk);
+    body += chunk;
+  });
+  response.on('end', function() {
+      //console.log('got the end status',body);
+    var places = JSON.parse(body);
+    /*
+     places = {
+         STATUS :
+         results:[loc1,loc2,]
+     }
+    */
+    //console.log(places);
+    var locations = places.results;
+    var firstLoc = locations[0];
+
+    res.json(firstLoc);
+  });
+}).on('error', function(e) {
+  console.log("Got error: " + e.message);
+}); 
+});
+server.get("/places/",(req,res)=>
+{
+    let str = req.query.search; // "coffee+shop+Austin"
+  
+    var url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query='+str + '&key=' +key;
+  console.log(url);
+https.get(url, function(response) {  
+    /*
+    response = {
+        data :{chunk:} ,
+
+    }
+    response ={
+        end:
+    }
+    */
+    console.log("got something");
+  var body ='';
+  response.on('data', function(chunk) {
+      //console.log(chunk);
+    body += chunk;
+  });
+  response.on('end', function() {
+      //console.log('got the end status',body);
+    var places = JSON.parse(body);
+    /*
+     places = {
+         STATUS :
+         results:[loc1,loc2,]
+     }
+    */
+    //console.log(places);
+    var locations = places.results;
+    var firstLoc = locations[0];
+
+    res.json(locations);
+  });
+}).on('error', function(e) {
+  console.log("Got error: " + e.message);
+}); 
+});

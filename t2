@@ -1,0 +1,12 @@
+    fetch(url)
+    .then(
+        function(response){
+            if (response.status != 200) {
+                console.log('Problem Status Code: '+ response.status);
+                return;
+            }
+            re
+        }
+    )
+});
+server.listen(3000);
