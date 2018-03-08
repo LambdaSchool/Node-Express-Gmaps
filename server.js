@@ -39,26 +39,42 @@ server.get("/place", (req, res) => {
     });
 });
 
-// server.get('/places', (req, res) => {
-//   const { search } = req.query;
+server.get('/places', (req, res) => {
+  const { search } = req.query;
 
-//   fetch(`${url}/textsearch/json?query=${search}&key=${MAP_KEY}`)
-//     .then(res => res.json())
-//     .then(json => json.result)
-//     .then(places => {
-//       const promises = [];
+  fetch(`${url}/textsearch/json?query=${search}&key=${MAP_KEY}`)
+    .then(res => res.json())
+    .then(json => json.results)
+    .then(places => {
+      const promises = [];
 
-//       places.forEach(place => {
-//         promises.push(new Promise(resolve => {
-//           fetch(`${url}/details/json?placeid=${place.place_id}&key=${MAP_KEY}`)
-//             .then(res => res.json())
-//             .then(json => {
-//             
-//             })
-//         }))
-//       })
-//     })
-// })
+      places.forEach(place => {
+        promises.push(new Promise(resolve => {
+          fetch(`${url}/details/json?placeid=${place.place_id}&key=${MAP_KEY}`)
+            .then(res => res.json())
+            .then(json => {
+              resolve(json.result);
+            })
+            .catch(err => {
+              res.status(STATUS_USER_ERROR);
+              res.send({ error: "Error fetching place details" });
+            });
+
+        }));
+        });
+
+      Promise.all(promises)
+        .then(data => {
+          res.status(STATUS_SUCCESS);
+          res.send(data);
+        });
+      })
+    .catch(err => {
+      res.status(STATUS_USER_ERROR);
+      res.send({ error: "Error fetching nearby places" });
+    });
+});
+
 
 server.listen(PORT, err => {
   if (err) {
