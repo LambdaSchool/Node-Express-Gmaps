@@ -28,22 +28,24 @@ server.get("/place", (req, res) => {
 server.get("/places", (req, res) => {
   const clientProvided = Object.keys(req.query)[0];
   const resultArray = [];
-  fetch(`${url}textsearch/json?query=${clientProvided}&key=${config.gmaps.apiKey}`)
+  const promiseArray = [];
+  const prom = fetch(`${url}textsearch/json?query=${clientProvided}&key=${config.gmaps.apiKey}`);
+  promiseArray.push(prom);
+  prom
     .then(res => res.json())
     .then(json => {
       json.results.forEach((elem, i) => {
-        fetch(`${url}details/json?placeid=${elem.place_id}&key=${config.gmaps.apiKey}`)
-        .then(res => res.json())
-        .then(json => resultArray.push(json.result))
-      /*  .then(json => if (i === json.results.length) {
-          res.send(resultArray)
-        }*/
-        .catch(err => res.send(err))
+        const prom2 = fetch(`${url}details/json?placeid=${elem.place_id}&key=${config.gmaps.apiKey}`)
+        promiseArray.push(prom2);
+        prom2
+          .then(res => res.json())
+          .then(json => resultArray.push(json.result))
+          .catch(err => res.send(err))
       })
-      .catch(err => res.send(err))
+      Promise.all(promiseArray).then(resp => res.send(resultArray));
     })
-    Promise.all().then(res.send(resultArray));
-})
+    .catch (err => res.send(err));
+});
 
 
 server.listen(config.port, (err) => {
