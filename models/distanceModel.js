@@ -9,9 +9,8 @@ function getDistance(origins, destinations) {
     const distanceUrl = URI_DISTANCE + origins + '&destinations=' + destinations + '&key=' + KEY_GMAPS_DISTANCES;
     fetch(distanceUrl)
       .then(distance => distance.json())
-      .then(distance => distance.rows.elements.map(element => element))
-      .then(elements => {
-        resolve(elements);
+      .then(distance => {
+        resolve(distance.rows.elements);
       })
       .catch(err => {
         reject(err);
