@@ -14,30 +14,30 @@ const STATUS_SUCCESS = 200;
 
 const url = "https://maps.googleapis.com/maps/api/place";
 
-// server.get("/place", (req, res) => {
-//   const { search } = req.query;
-//   if (!search) {
-//     res.send({ STATUS_USER_ERROR: "Input a place" });
-//     return;
-//   }
-//   console.log("Your search is ", search);
-//   fetch(`${url}/textsearch/json?query=${search}&key=${MAP_KEY}`)
-//     .then(res => res.json())
-//     .then(json => json.results[0].place_id)
-//     .then(place => {
-//       fetch(`${url}/details/json?placeid=${place}&key=${MAP_KEY}`)
-//         .then(res => res.json())
-//         .then(json => {
-//           res.send({ STATUS_SUCCESS: json.result });
-//         })
-//         .catch(err => {
-//           res.send({ STATUS_USER_ERROR: "Error fetching place" });
-//         });
-//     })
-//     .catch(err => {
-//       res.send({ STATUS_USER_ERROR: "Error fetching details" });
-//     });
-// });
+server.get("/place", (req, res) => {
+  const { search } = req.query;
+  if (!search) {
+    res.send({ STATUS_USER_ERROR: "Input a place" });
+    return;
+  }
+  console.log("Your search is ", search);
+  fetch(`${url}/textsearch/json?query=${search}&key=${MAP_KEY}`)
+    .then(res => res.json())
+    .then(json => json.results[0].place_id)
+    .then(place => {
+      fetch(`${url}/details/json?placeid=${place}&key=${MAP_KEY}`)
+        .then(res => res.json())
+        .then(json => {
+          res.send({ STATUS_SUCCESS: json.result });
+        })
+        .catch(err => {
+          res.send({ STATUS_USER_ERROR: "Error fetching place" });
+        });
+    })
+    .catch(err => {
+      res.send({ STATUS_USER_ERROR: "Error fetching details" });
+    });
+});
 
 // server.get('/places', (req, res) => {
 //   const { search } = req.query;
