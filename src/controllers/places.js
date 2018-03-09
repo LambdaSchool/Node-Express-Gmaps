@@ -1,47 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const {
-  STATUS_SUCCESS,
-  STATUS_USER_ERROR
-} = require('../statusCodes')
-const {
-  getIds,
-  getDetails
-} = require('../models/places.js');
+const {STATUS_SUCCESS, STATUS_USER_ERROR} = require('../statusCodes');
+const {getPlace, getPlaces} = require('../models/places.js');
 
 router.get('/place', (req, res) => {
-  getIds(req.query.searchTxt)
-    .then(
-      console.log('places search: ', req.query.searchTxt),
-      ids =>  {
-      console.log('placesControllerIds: ', ids)
-      [ids[0]]})
-    .then(getDetails)
-    .then(details => {
-      res.status(STATUS_SUCCESS);
-      res.send( {places: details} );
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(STATUS_USER_ERROR);
-      res.send( {err: err} );
-    });
+    getPlace(req.query.searchTxt)
+        .then(response => res.send(response[0]))
+        .catch(err => res.status(STATUS_USER_ERROR).send({err: err}));
 });
 
 router.get('/places', (req, res) => {
-  getIds(req.query.searchTxt)
-    .then(
-      // console.log('places search: ', req.query.searchTxt),
-      getDetails)
-    .then(details => {
-      // console.log('places details: ', details);
-      res.status(STATUS_SUCCESS);
-      res.send( {places: details} );
-    })
-    .catch(err => {
-      res.status(STATUS_USER_ERROR);
-      res.send( {err: err} );
-    });
+    getPlaces(req.query.searchTxt)
+        .then(response => res.status(STATUS_SUCCESS).send(response))
+        .catch(err => {
+            res.status(STATUS_USER_ERROR);
+            res.send({err: err});
+        });
 });
 
 module.exports = router;
