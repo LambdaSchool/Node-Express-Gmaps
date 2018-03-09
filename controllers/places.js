@@ -69,14 +69,25 @@ router.get('/travel/mode', (req, res) => {
 
   getDistance(origins, destination).then((data) => {
 
-    let travelData = {
-      walking: data[1].rows[0].elements[0].duration,
-      transit: data[2].rows[0].elements[0].duration,
-      bicycling: data[3].rows[0].elements[0].duration,
-      driving: data[0].rows[0].elements[0].duration
-    };
+    let travelData = [
+      {mode: 'walking',
+       time: data[1].rows[0].elements[0].duration},
+      {mode: 'transit',
+       time: data[2].rows[0].elements[0].duration},
+      {mode: 'bicycling',
+       time: data[3].rows[0].elements[0].duration},
+      {mode: 'driving',
+       time: data[0].rows[0].elements[0].duration}
+    ];
+
+    let quickest = travelData.reduce((prev, current) => {
+      return prev.time < current.time ? prev : current;
+    });
+    console.log(quickest)
+
+
     
-    res.send(travelData);
+    res.send(`The quickest mode of transportation is ${quickest.mode}, which takes ${quickest.time.text}.`);
   });
 });
 
