@@ -56,20 +56,30 @@ function getDistance(origin, des) {
       return fetch(distanceUrl)
         .then((distance) => distance.json())
         .then((distance) => {
-      return {
-          mode: mode,
-          time: distance.rows[0].elements[0].duration.text,
-          value: distance.rows[0].elements[0].duration.value,
-        }})
-    })
+          return {
+            mode: mode,
+            time: distance.rows[0].elements[0].duration.text,
+            value: distance.rows[0].elements[0].duration.value,
+          };
+        });
+    });
     Promise.all(modes)
       .then((distance) => resolve(distance))
       .catch((err) => reject(err));
   }).catch((err) => reject(err));
 }
 
+function getShortestDistance(modes) {
+  // console.log(modes);
+  const shortestDistance = modes.reduce((smallest, current) => {
+    return smallest.value < current.value ? smallest : current;
+  });
+  return shortestDistance;
+}
+
 module.exports = {
   getIds,
   getDetails,
   getDistance,
+  getShortestDistance,
 };
