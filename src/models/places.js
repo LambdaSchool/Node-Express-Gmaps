@@ -2,8 +2,11 @@ const fetch = require('node-fetch');
 const config = require('../../config.js');
 
 const KEY_GMAPS_PLACES = config.gmaps.apiKeys.places;
-const URI_TEXT_SEARCH = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=';
-const URI_PLACE_DETAILS = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=';
+const URI_TEXT_SEARCH = config.gmaps.URIs.places.TEXT_SEARCH;
+// 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=';
+
+const URI_PLACE_DETAILS = config.gmaps.URIs.places.PLACE_DETAILS;
+//'https://maps.googleapis.com/maps/api/place/details/json?placeid=';
 
 function getIds(query) {
   return new Promise((resolve, reject) => {
