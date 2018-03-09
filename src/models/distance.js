@@ -27,6 +27,14 @@ function getTravelTimes(clientOrigin, clientDestination) {
   });
 }
 
+function getQuickest(arr) {
+  const quickest = arr.reduce((memo, currentObj) => {
+    return Math.min(memo.duration.value, currentObj.duration.value) === memo.duration.value ? memo : currentObj;
+  });
+  return {mode: quickest.mode, duration: quickest.duration.text };
+}
+
 module.exports = {
-  getTravelTimes
+  getTravelTimes,
+  getQuickest
 };

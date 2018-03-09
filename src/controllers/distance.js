@@ -5,14 +5,16 @@ const STATUS_SUCCESS = 200;
 const STATUS_USER_ERROR = 422;
 
 const {
-  getTravelTimes
+  getTravelTimes,
+  getQuickest
 } = require('../models/distance.js');
 
 router.get('/travel/mode', (req, res) => {
   getTravelTimes(req.query.origin, req.query.destination)
-    .then(travel_times => {
+    .then(getQuickest)
+    .then(travel_time => {
       res.status(STATUS_SUCCESS);
-      res.send( {travel_times: travel_times} );
+      res.send(travel_time);
     })
     .catch(err => {
       res.status(STATUS_USER_ERROR);
