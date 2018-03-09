@@ -4,8 +4,9 @@ const config = require('../config.js');
 const PORT = config.port;
 const KEY_PLACE = config.gmaps.apiKey.place_search;
 const KEY_DISTANCE = config.gmaps.apiKey.distance_matrix
-const PLACE_SEARCH_URL = `https://maps.googleapis.com/maps/api/place/textsearch/json?`;
-const PLACE_DETAILS_URL = `https://maps.googleapis.com/maps/api/place/details/json?`;
+const PLACE_SEARCH_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json?";
+const PLACE_DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/json?";
+const DISTANCE_MATRIX_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?"
 
 function getIds(term) {
   return new Promise((resolve, reject) => {
@@ -39,4 +40,17 @@ function getDetails(ids) {
   });
 }
 
-module.exports = { getDetails, getIds }
+function getTravelInfo(origins, destinations) {
+  return new Promise((resolve, reject) => {
+    fetch(`${DISTANCE_MATRIX_URL}&units=imperial&origins=${origins}&destinations=${destinations}&key=${KEY_DISTANCE}`)
+      .then(res => res.json())
+      .then(travelInfo => {
+        resolve(travelInfo);
+      })
+      .catch(err => {
+        reject(err);
+      })
+  })
+}
+
+module.exports = { getDetails, getIds, getTravelInfo }
