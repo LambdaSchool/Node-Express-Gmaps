@@ -36,4 +36,10 @@ router.get('/places', (req, res) => {
     });
 });
 
+//Day II
+router.get('/travel/mode', (req, res) => {
+    getDistance(req.query)
+    .then()
+});
+
 module.exports = router;

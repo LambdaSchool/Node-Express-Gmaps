@@ -8,6 +8,7 @@ const URI_TEXT_SEARCH = config.gmaps.URIs.places.TEXT_SEARCH;
 const URI_PLACE_DETAILS = config.gmaps.URIs.places.PLACE_DETAILS;
 //'https://maps.googleapis.com/maps/api/place/details/json?placeid=';
 
+// Node-Express-Gmaps-Day-I
 function getIds(query) {
   return new Promise((resolve, reject) => {
     const searchUrl = URI_TEXT_SEARCH + query + '&key=' + KEY_GMAPS_PLACES;
@@ -40,6 +41,25 @@ function getDetails(ids) {
         reject(err);
       });
   });
+}
+
+// Node-Express-Gmaps-Day-II
+const KEY_GMAPS_DISTANCE = config.gmaps.apiKeys.distance;
+const URI_DISTANCE = config.gmaps.URIs.distance.DISTANCE_URL;
+
+function getTime(mode) {
+    return new Promise((resolve, reject) => {
+        const distanceUrl = URI_DISTANCE + 'origins=' + query.origin + '&destinations=' + query.destination + '&mode=' + query.mode + '&key=' + KEY_GMAPS_DISTANCE;
+        fetch(distanceUrl)
+        .then(travelInfo => travelInfo.json())
+        .then(travelInfo => {
+            const travelTime = travelInfo.rows.elements.duration.value;
+            resolve(travelTime);
+        })
+        .catch(err => {
+            reject(err);
+        });
+    });
 }
 
 module.exports = {
