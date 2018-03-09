@@ -95,7 +95,7 @@ server.get('/places', (req, res) => {
     });
 });
 
-// Postman Query Sameple: localhost:3000//travel/mode?origins=Phoenix+Arizona&destinations=San+Francisco
+// Postman Query Sample: localhost:3000//travel/mode?origins=Phoenix+Arizona&destinations=San+Francisco
 server.get('/travel/mode', (req, res) => {
   let { query } = req;
   let { origins, destinations } = query;
