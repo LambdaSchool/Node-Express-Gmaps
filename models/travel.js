@@ -23,6 +23,16 @@ const travelTypes = [
   },
 ];
 
+const handleData = (data) => {
+  let best = data[0];
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][1] < best[1]) {
+      best = data[i];
+    }
+  }
+  return best;
+};
+
 function getTravel(origin, destination) {
   return new Promise((resolve, reject) => {
     const modesMap = travelTypes.map(type => {
@@ -37,9 +47,8 @@ function getTravel(origin, destination) {
         })
     })
       Promise.all(modesMap)
-        .then(modesMap => {
-          resolve(modesMap);
-        })
+        .then(modesMap => handleData(modesMap))
+        .then(res => resolve(res))
         .catch(err => {
           reject(err);
         });
