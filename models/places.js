@@ -2,10 +2,8 @@ const fetch = require('node-fetch');
 const config = require('../config.js');
 
 const KEY_GMAPS_PLACES = config.gmaps.placesKey;
-const KEY_GMAPS_TRAVEL = config.gmaps.travelKey;
 const URI_TEXT_SEARCH = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=';
 const URI_PLACE_DETAILS = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=';
-const URI_TRAVEL_DETAILS = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=';
 
 function getIds(query) {
   return new Promise((resolve, reject) => {
@@ -41,22 +39,7 @@ function getDetails(ids) {
   });
 }
 
-function getTravel(origin, destination, mode) {
-  return new Promise((resolve, reject) => {
-    const travelURL = URI_TRAVEL_DETAILS + origin + '&destinations=' + destination + '&mode=' + mode + '&key=' + KEY_GMAPS_TRAVEL;
-    fetch(travelURL)
-      .then(details => details.json())
-      .then(details => {
-        resolve(details.rows[0].elements[0].distance.value);
-      })
-      .catch(err => {
-        reject(err);
-      });
-  });
-}
-
 module.exports = {
   getIds,
   getDetails,
-  getTravel,
 }
