@@ -53,14 +53,17 @@ function getDistance(origin, des) {
         mode +
         '&key=' +
         KEY_GMAPS_DISTANCE;
-      fetch(distanceUrl)
+      return fetch(distanceUrl)
         .then((distance) => distance.json())
-        .then((distance) => distance.rows[0].elements[0].duration.value)
-        .then((distance) => resolve(distance))
-        .catch((err) => reject(err));
-    });
+        .then((distance) => {
+      return {
+          mode: mode,
+          time: distance.rows[0].elements[0].duration.text,
+          value: distance.rows[0].elements[0].duration.value,
+        }})
+    })
     Promise.all(modes)
-      .then((distances) => resolve(distances))
+      .then((distance) => resolve(distance))
       .catch((err) => reject(err));
   }).catch((err) => reject(err));
 }

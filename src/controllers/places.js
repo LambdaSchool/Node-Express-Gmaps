@@ -36,8 +36,8 @@ router.get('/places', (req, res) => {
 router.get('/travel/mode', (req, res) => {
   const { origin, des } = req.query;
   getDistance(origin, des)
-    .then((modes) => console.log(modes))
-  //   .then(getDetails)
+    .then((modes) => modes.reduce())
+  //  .then(getDetails)
   //   .then((details) => {
   //     res.status(STATUS_SUCCESS);
   //     res.send({ places: details });
