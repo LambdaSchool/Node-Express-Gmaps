@@ -1,6 +1,6 @@
 const express = require('express');
 const config = require('../config');
-const placesController = require('./controllers/places.js')
+const placesController = require('./controllers/controller-places.js')
 
 const port = config.port;
 const server = express();

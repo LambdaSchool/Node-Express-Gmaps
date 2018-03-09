@@ -7,15 +7,11 @@ const {
 const {
   getIds,
   getDetails
-} = require('../models/places.js');
+} = require('../models/model-places.js');
 
 router.get('/place', (req, res) => {
   getIds(req.query.searchTxt)
-    .then(
-      console.log('places search: ', req.query.searchTxt),
-      ids =>  {
-      console.log('placesControllerIds: ', ids)
-      [ids[0]]})
+    .then(ids => [ids[0]])
     .then(getDetails)
     .then(details => {
       res.status(STATUS_SUCCESS);
@@ -30,11 +26,8 @@ router.get('/place', (req, res) => {
 
 router.get('/places', (req, res) => {
   getIds(req.query.searchTxt)
-    .then(
-      // console.log('places search: ', req.query.searchTxt),
-      getDetails)
+    .then(getDetails)
     .then(details => {
-      // console.log('places details: ', details);
       res.status(STATUS_SUCCESS);
       res.send( {places: details} );
     })
