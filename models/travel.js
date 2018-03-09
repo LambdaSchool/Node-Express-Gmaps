@@ -7,30 +7,30 @@ const KEY_GMAPS_TRAVEL = config.gmaps.travelKey;
 const travelTypes = [
   {
     mode: 'driving',
-    value: 0,
   },
   {
     mode: 'walking',
-    value: 0,
   },
   {
     mode: 'bicycling',
-    value: 0,
   },
   {
     mode: 'transit',
-    value: 0,
   },
 ];
 
 const handleData = (data) => {
   let best = data[0];
   for (let i = 1; i < data.length; i++) {
-    if (data[i][1] < best[1]) {
+    if (data[i].time < best.time) {
       best = data[i];
     }
   }
   return best;
+};
+
+const getTime = (data) => {
+  return `${Math.floor(data / 3600)} hours, ${(data % 3600) / 60} minutes`;
 };
 
 function getTravel(origin, destination) {
@@ -39,8 +39,8 @@ function getTravel(origin, destination) {
       const travelURL = URI_TRAVEL_DETAILS + origin + '&destinations=' + destination + '&mode=' + type.mode + '&key=' + KEY_GMAPS_TRAVEL;
       return fetch(travelURL)
         .then(res => res.json())
-        .then(res => res.rows[0].elements[0].distance.value)
-        .then(res => [].concat(type.mode, res))
+        .then(res => res.rows[0].elements[0].duration.value)
+        .then(res => [].concat({ origin: origin, destination: destination, method: type.mode, time: getTime(res) }))
         .catch(err => {
           console.error(err);
           reject(err);
