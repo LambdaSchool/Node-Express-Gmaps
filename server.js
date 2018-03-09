@@ -5,10 +5,10 @@ const axios = require('axios');
 const fetch = require('node-fetch');
 
 const key = config.gmaps.apiKey;
+const matrixKey = config.gMatrix.apiKey;
 const PORT = config.port;
 const STATUS_SUCCESS = 200;
 const STATUS_USER_ERROR = 422;
-const resultIds = [];
 const results = [];
 
 const server = express();
@@ -92,6 +92,39 @@ server.get('/places', (req, res) => {
           res.status(STATUS_USER_ERROR);
           res.send({ err: 'eesh' });
         });
+    });
+});
+
+// Postman Query Sameple: localhost:3000//travel/mode?origins=Phoenix+Arizona&destinations=San+Francisco
+server.get('/travel/mode', (req, res) => {
+  let { query } = req;
+  let { origins, destinations } = query;
+  origins = origins.split(' ').join('+');
+  destinations = destinations.split(' ').join('+');
+  let modes = ['driving', 'walking', 'bicycling', 'transit'];
+  let durations = [];
+
+  options = modes.map((mode, i) => {
+    return fetch(
+      `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origins}&destinations=${destinations}&mode=${mode}&key=${matrixKey}`
+    )
+      .then((data) => data.json())
+      .then((data) => {
+        return { type: mode, duration: data.rows[0].elements[0].duration };
+      });
+  });
+  Promise.all(options)
+    .then((options) => {
+      options.forEach((option) => {
+        let { type, duration } = option;
+        durations.push({ type, duration });
+      });
+      res.status(STATUS_SUCCESS);
+      res.send({ durations });
+    })
+    .catch((err) => {
+      res.status(STATUS_USER_ERROR);
+      res.send({ err: 'eesh' });
     });
 });
 
