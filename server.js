@@ -119,8 +119,20 @@ server.get('/travel/mode', (req, res) => {
         let { type, duration } = option;
         durations.push({ type, duration });
       });
+      let fastestMode = {
+        type: durations[0].type,
+        value: durations[0].duration.value
+      };
+      durations.forEach((mode, i) => {
+        if (mode.duration.value < fastestMode.value) {
+          Object.assign(fastestMode, {
+            type: mode.type,
+            value: mode.duration.value
+          });
+        }
+      });
       res.status(STATUS_SUCCESS);
-      res.send({ durations });
+      res.send(fastestMode);
     })
     .catch((err) => {
       res.status(STATUS_USER_ERROR);
