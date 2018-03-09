@@ -8,7 +8,7 @@ const { getDistances } = require("../models/travel-distance.js");
 
 router.get("/travel/modes", (req, res) => {
   const { start, finish } = req.query;
-  getDistances(start, finish)
+  getDistances(req.query.start, req.query.finish)
     .then(ids => {
       res.send({ STATUS_SUCCESS: ids });
     })
@@ -19,3 +19,5 @@ router.get("/travel/modes", (req, res) => {
 });
 
 module.exports = router;
+
+//Comment to add.

@@ -3,12 +3,13 @@ const config = require("../config.js");
 
 const starterUrl = "https://maps.googleapis.com/maps/api/distancematrix";
 
-const KEY_GMAPS_DISTANCES = config.gmaps.apiKey.distances;
+const KEY_GMAPS_DISTANCES = config.gmaps.apiKey;
 
 
-function getDistances(start = "los+angeles", finish = "new+york") {
+function getDistances(start, finish) {
+
   return new Promise((resolve, reject) => {
-    const URL_DRIVING_DISTANCES = `${starterUrl}/json?origins=` + start + `&destinations=` + finish + `&key=` + KEY_GMAPS_DISTANCES + "&mode=driving";
+    const URL_DRIVING_DISTANCES = `${starterUrl}/json?origins=${start}&destinations=${finish}&key=${KEY_GMAPS_DISTANCES}&mode=driving`;
     console.log(URL_DRIVING_DISTANCES);
     fetch(URL_DRIVING_DISTANCES)
       .then(distances => distances.json())
