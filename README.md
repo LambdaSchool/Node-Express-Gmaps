@@ -39,7 +39,7 @@ Topics:
 * Create an enpoint called `/travel/mode` that returns the quickest method of travel given two locations, as well as the travel time. It should account for driving, walking, bicycling, and transit.
 
 ## Project Notes
-* You will need a separate key than what you've used for the Places API since it is actually a different API.
+* You will need a separate key than what you've used for the Places API since it is actually a different API. This can be found in the second link provided in *Resourses*.
 * For best results, try to pick locations that should indeed have transit available.
 
 ## Stretch Problem
