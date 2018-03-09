@@ -75,11 +75,6 @@ server.get('/places', (req, res) => {
         res.send( {err: err} );
         });
     });
-      
-// server.listen(PORT, (err) => {
-//     if (err) console.error(err);
-//     else console.log(`Server is listening on port ${PORT}`);
-// });
 
 server.listen(PORT, err => {
     if (err) {
