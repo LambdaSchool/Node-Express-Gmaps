@@ -30,6 +30,7 @@ function getTravel(origin, destination) {
       return fetch(travelURL)
         .then(res => res.json())
         .then(res => res.rows[0].elements[0].distance.value)
+        .then(res => {[].concat(type.mode, res)})
         .catch(err => {
           console.error(err);
           reject(err);

@@ -43,7 +43,6 @@ router.get('/travel/mode', (req, res) => {
   const { origin, destination } = req.query;
   getTravel(origin, destination)
     .then(details => {
-      console.log(details);
       res.status(STATUS_SUCCESS);
       res.send( {results: details} );
     })
