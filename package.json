@@ -1,0 +1,27 @@
+{
+  "name": "node-api-practice",
+  "version": "1.0.0",
+  "description": "Topics:\r  * APIs\r  * API Documentation\r  * Rate Limits\r  * Multiple requests",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lys916/Node-Express-Gmaps.git"
+  },
+  "author": "Lo & Chris",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lys916/Node-Express-Gmaps/issues"
+  },
+  "homepage": "https://github.com/lys916/Node-Express-Gmaps#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "node-fetch": "^2.1.1",
+    "nodemon": "^1.17.1",
+    "request": "^2.83.0"
+  }
+}
