@@ -47,22 +47,57 @@ function getDetails(ids) {
 const KEY_GMAPS_DISTANCE = config.gmaps.apiKeys.distance;
 const URI_DISTANCE = config.gmaps.URIs.distance.DISTANCE_URL;
 
-function getTime(mode) {
+// function getTimeMode(query) {
+//     // console.log(destinations);
+//     return new Promise((resolve, reject) => {
+//         const travelUrl = URI_DISTANCE + query;
+//         // + '&key=' + KEY_GMAPS_DISTANCE;
+//         console.log(travelUrl);
+//         fetch(travelUrl)
+//         .then(travelInfo => travelInfo.json())
+//         .then(travelInfo => {
+//             const travelTimeMode = { 
+//                 time: travelInfo.rows.elements.duration.value,
+//                 mode: query.mode
+//             };
+//             resolve(travelTimeMode);
+//         })
+//         .catch(err => {
+//             reject(err);
+//         });
+//     });
+// }
+
+function getDistances(origin, destination) {
+    const modes = ['bicycling', 'walking', 'driving', 'transit'];
     return new Promise((resolve, reject) => {
-        const distanceUrl = URI_DISTANCE + 'origins=' + query.origin + '&destinations=' + query.destination + '&mode=' + query.mode + '&key=' + KEY_GMAPS_DISTANCE;
-        fetch(distanceUrl)
-        .then(travelInfo => travelInfo.json())
-        .then(travelInfo => {
-            const travelTime = travelInfo.rows.elements.duration.value;
-            resolve(travelTime);
-        })
-        .catch(err => {
-            reject(err);
-        });
-    });
-}
+        const distances = modes.map(mode => {
+            return fetch(`${URI_DISTANCE}${origin}&destinations=${destination}&mode=${mode}&key=${KEY_GMAPS_DISTANCE}`)
+                    .then(res => res.json())
+                    .then(distance => {
+                        return (result = [mode, distance.rows[0].elements[0].duration.text, distance.rows[0].elements[0].duration.value]);})
+                    .catch(err => {
+                        reject(err);
+                    });
+                });
+        
+        Promise.all(distances)
+                .then(distances => {
+                    distances.sort((a, b) => {
+                        return a[2] - b[2];
+                    });
+                    const shortestMode = distances[0][0];
+                    const shortestTime = distances[0][1];
+                    resolve(`${shortestMode} is the quickest method at ${shortestTime}, from ${origin} to ${destination}.`);
+                })
+                .catch(err => {
+                    reject(err);
+                });
+            });
+    }
 
 module.exports = {
   getIds,
-  getDetails
+  getDetails,
+  getDistances,
 }
