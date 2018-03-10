@@ -125,28 +125,49 @@
 
    https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4&key=YOUR_API_KEY
 
+   @ ASSIGNMENT
+   ==================================================
+   
+   1.   Create an  endpoint /place  that, provided  a
+   query, returns the  detailed information about the
+   first  place  that  is  in  the  array  of  places
+   returned to  you from  Place Search.  You  will be
+   using the node-fetch library to make your requests
+   to the Place  Search API. You can  use its example
+   code in its github repo as guidance for its use.
+
+   2. Stretch goal: Create  an endpoint /places that,
+   provided a query  returns the detailed information
+   about  ALL  places  returned  to  you  from  Place
+   Search.
+
    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
    --------------------------------------------------
    VERSION 0.1 2018-03-07T10:27:14
-   ..................................................  -
+   ..................................................
    Initial commit
    __________________________________________________ 
    VERSION 1.0 2018-03-07T17:55:51
    ..................................................
    - first working version
    __________________________________________________
+   VERSION 0.2 2018-03-10T11:25:55
+   ..................................................
+   - moved some config data into config.js;
+   - added assignment info to comment for reference;
+   __________________________________________________
  */
 
 const express = require('express');
 const fetch = require('node-fetch');
 
-const { PORT, gmaps } = require('./config');
-
-const STATUS_OK = 200;
-const STATUS_USER_ERROR = 422;
+const { PORT,
+        STATUS,
+        APIS,
+        gmaps } = require('./config');
 
 const APIKEY = gmaps.apiKey;
-const GOOGLE_API_URL = 'https://maps.googleapis.com/maps/api/place';
+const PLACE_API = APIS.GOOGLE_MAPS_PLACE;
 const TEXT_SEARCH = 'textsearch';
 const DETAILS_REQUEST = 'details';
 const JSON_OUTPUT = 'json';
@@ -167,11 +188,11 @@ const parameters = [
 
 /* Some helper functions */
 const assembleQueryString = (userQuery) => {
-  return `${GOOGLE_API_URL}/${TEXT_SEARCH}/${JSON_OUTPUT}?query=${userQuery}&key=${APIKEY}`;
+  return `${PLACE_API}/${TEXT_SEARCH}/${JSON_OUTPUT}?query=${userQuery}&key=${APIKEY}`;
 }
 
 const assembleDetailsRequest = (placeID) => {
-  return `${GOOGLE_API_URL}/${DETAILS_REQUEST}/${JSON_OUTPUT}?placeid=${placeID}&key=${APIKEY}`;
+  return `${PLACE_API}/${DETAILS_REQUEST}/${JSON_OUTPUT}?placeid=${placeID}&key=${APIKEY}`;
 }
 
 /* Start the App */
@@ -197,18 +218,18 @@ app.get('/place', (req, res) => {
         .then(resultDetails => {
 
           /* if everything worked, return the result */
-          res.status(STATUS_OK);
+          res.status(STATUS.OK);
           res.send(resultDetails);
         })
 
         .catch(err => {
-          res.status(STATUS_USER_ERROR);
+          res.status(STATUS.USER_ERROR);
           res.send({ err: err });
         });
     })
 
     .catch(err => {
-      res.status(STATUS_USER_ERROR);
+      res.status(STATUS.USER_ERROR);
       res.send({ err: err });
     });
 });
