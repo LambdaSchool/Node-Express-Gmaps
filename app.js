@@ -156,6 +156,11 @@
    - moved some config data into config.js;
    - added assignment info to comment for reference;
    __________________________________________________
+   VERSION 0.3 2018-03-10T12:00:57
+   ..................................................
+   - renamed resArr to placesArr;
+   - added error loggin;
+   __________________________________________________
  */
 
 const express = require('express');
@@ -206,11 +211,11 @@ app.get('/place', (req, res) => {
 
   fetch(queryString)
     .then(res => res.json())
-    .then(resArr => {
+    .then(placesArr => {
 
       /* pull the place_id from the first result
          and assemble into a details request */
-      const placeID = resArr.results[0].place_id;
+      const placeID = placesArr.results[0].place_id;
       const detailsString = assembleDetailsRequest(placeID);
 
       fetch(detailsString)
@@ -223,12 +228,14 @@ app.get('/place', (req, res) => {
         })
 
         .catch(err => {
+          error.log(err);
           res.status(STATUS.USER_ERROR);
           res.send({ err: err });
         });
     })
 
     .catch(err => {
+      error.log(err);
       res.status(STATUS.USER_ERROR);
       res.send({ err: err });
     });
