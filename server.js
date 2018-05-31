@@ -19,7 +19,6 @@ server.get('/', (req, res) => {
   const searchPlace = req.query.q;
   const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchPlace}&key=`;
 
-
   const getLocation = async url => {
     try {
       const response = await fetch(url);
