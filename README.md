@@ -28,7 +28,7 @@ Topics:
  * Create an endpoint `/places` that, provided a query returns the detailed information about ALL places returned to you from `Place Search`.
 
 ## Resources
- * Places API: https://developers.google.com/places/web-service/
+ * Places API: `https://developers.google.com/places/web-service/`
  * Place Search: https://developers.google.com/places/web-service/search
  * Place Details: https://developers.google.com/places/web-service/details
  * Request Library: https://github.com/bitinn/node-fetch
