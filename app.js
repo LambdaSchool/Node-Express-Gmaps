@@ -28,7 +28,7 @@ const fetchResults = (req, res) => {
       }
       (path === '/') ? res.json(json.results[0]) : res.json(json.results);
     })
-    .catch(err => res.json(err));
+    .catch(() => error(res, 500, 'Something went horribly, HORRIBLY wrong...'));
 }
 
 /*************************
